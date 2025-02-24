@@ -6,7 +6,7 @@
 </head>
 <body>
     <script>
-        windows.location.href = "";
+        window.location.href = "home.jsp";
     </script>
 </body>
 </html>

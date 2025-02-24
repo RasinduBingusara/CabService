@@ -14,11 +14,11 @@ public class AccountService {
     private AccountRepo accountRepo = new AccountRepo();
 
     public ResponseWrapper<User> login(UserAuthDTO userAuthDTO) {
-        PasswordWrapper<User> reponse = accountRepo.getUserByEmail(userAuthDTO.getEmail());
-        if(reponse.getData() != null) {
+        PasswordWrapper<User> response = accountRepo.getUserByEmail(userAuthDTO.getEmail());
+        if(response.getData() != null) {
 
-            if(PasswordUtill.checkPassword(userAuthDTO.getPassword(), reponse.getPassword())) {
-                return new ResponseWrapper<>("User logged in successfully",reponse.getData());
+            if(PasswordUtill.checkPassword(userAuthDTO.getPassword(), response.getPassword())) {
+                return new ResponseWrapper<>("User logged in successfully",response.getData());
             }
             else{
                 return new ResponseWrapper<>("Invalid Username or Password",null);

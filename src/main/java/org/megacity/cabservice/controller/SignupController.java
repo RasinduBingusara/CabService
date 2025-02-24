@@ -43,21 +43,10 @@ public class SignupController extends HttpServlet {
             response.sendRedirect("login.jsp");
         }
         else{
-            switch (usertype) {
-                case "Customer":
-                    request.setAttribute("user", user);
-                    request.setAttribute("error", responseWrapper.getMessage());
-                    request.setAttribute("type", usertype);
-                    request.getRequestDispatcher("signup.jsp").forward(request,response);
-                    break;
-                case "Driver":
-                    request.setAttribute("user", user);
-                    request.setAttribute("error", responseWrapper.getMessage());
-                    request.setAttribute("type", usertype);
-                    request.getRequestDispatcher("signup.jsp").forward(request,response);
-                    break;
-
-            }
+            request.setAttribute("user", user);
+            request.setAttribute("error", responseWrapper.getMessage());
+            request.setAttribute("type", usertype);
+            request.getRequestDispatcher("signup.jsp").forward(request,response);
         }
 
 
