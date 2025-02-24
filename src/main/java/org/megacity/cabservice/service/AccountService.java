@@ -1,13 +1,8 @@
 package org.megacity.cabservice.service;
 
-import com.google.protobuf.BoolValueOrBuilder;
-import org.megacity.cabservice.dto.driver_dto.DriverInsertDTO;
 import org.megacity.cabservice.dto.user_dto.UserAuthDTO;
-import org.megacity.cabservice.dto.user_dto.UserInsertDTO;
-import org.megacity.cabservice.dto.user_dto.UserResponseDTO;
 import org.megacity.cabservice.mapper.DriverMapper;
 import org.megacity.cabservice.mapper.UserMapper;
-import org.megacity.cabservice.model.BooleanWrapper;
 import org.megacity.cabservice.model.PasswordWrapper;
 import org.megacity.cabservice.model.ResponseWrapper;
 import org.megacity.cabservice.model.User;

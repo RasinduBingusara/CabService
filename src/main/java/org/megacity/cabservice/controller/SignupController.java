@@ -4,12 +4,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.megacity.cabservice.dto.user_dto.UserInsertDTO;
-import org.megacity.cabservice.model.BooleanWrapper;
 import org.megacity.cabservice.model.ResponseWrapper;
 import org.megacity.cabservice.model.User;
 import org.megacity.cabservice.service.AccountService;
-import org.megacity.cabservice.util.PasswordUtill;
 
 import java.io.IOException;
 
