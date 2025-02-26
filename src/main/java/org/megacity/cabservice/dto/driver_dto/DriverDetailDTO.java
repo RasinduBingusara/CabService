@@ -15,6 +15,8 @@ public class DriverDetailDTO {
     private String updatedAt;
     private String createdAt;
 
+
+
     public DriverDetailDTO(String firstName, String lastName, String email, String contactNumber, String userType, String status, String driverLicense, String nic, String address, String employmentType, String updatedAt, String createdAt) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -77,4 +79,37 @@ public class DriverDetailDTO {
     public String getCreatedAt() {
         return createdAt;
     }
+
+    public String toJson() {
+
+        StringBuilder json = new StringBuilder();
+        json.append("{")
+                .append("\"first_name\":\"").append(escapeJson(firstName)).append("\",")
+                .append("\"last_name\":\"").append(escapeJson(lastName)).append("\",")
+                .append("\"email\":\"").append(escapeJson(email)).append("\",")
+                .append("\"contact_number\":\"").append(escapeJson(contactNumber)).append("\",")
+                .append("\"user_type\":\"").append(escapeJson(userType)).append("\",")
+                .append("\"status\":\"").append(escapeJson(status)).append("\",")
+                .append("\"driver_license\":\"").append(escapeJson(driverLicense)).append("\",")
+                .append("\"nic\":\"").append(escapeJson(nic)).append("\",")
+                .append("\"address\":\"").append(escapeJson(address)).append("\",")
+                .append("\"employment_type\":\"").append(escapeJson(employmentType)).append("\",")
+                .append("\"updated_at\":\"").append(escapeJson(updatedAt)).append("\",")
+                .append("\"created_at\":\"").append(escapeJson(createdAt)).append("\"")
+                .append("}");
+
+        return json.toString();
+    }
+
+    private String escapeJson(String value) {
+        if (value == null) {
+            return "";
+        }
+        return value.replace("\\", "\\\\")   // Escape backslashes
+                .replace("\"", "\\\"")   // Escape double quotes
+                .replace("\n", "\\n")    // Escape new lines
+                .replace("\r", "\\r")    // Escape carriage returns
+                .replace("\t", "\\t");   // Escape tabs
+    }
+
 }

@@ -21,4 +21,13 @@
         <servlet-name>SignupController</servlet-name>
         <url-pattern>/signup</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DriverController</servlet-name>
+        <servlet-class>org.megacity.cabservice.controller.DriverController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DriverController</servlet-name>
+        <url-pattern>/drivers</url-pattern>
+    </servlet-mapping>
 </web-app>

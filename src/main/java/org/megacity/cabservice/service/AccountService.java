@@ -1,5 +1,6 @@
 package org.megacity.cabservice.service;
 
+import org.megacity.cabservice.dto.driver_dto.DriverInsertDTO;
 import org.megacity.cabservice.dto.user_dto.UserAuthDTO;
 import org.megacity.cabservice.mapper.DriverMapper;
 import org.megacity.cabservice.mapper.UserMapper;
@@ -59,9 +60,18 @@ public class AccountService {
                             new ResponseWrapper<>("Account already exists",null);
                     break;
                 case "Driver":
-                    responseWrapper =  accountRepo.addNewDriver(DriverMapper.getInstance().toDriverInsertDto(user))?
-                            new ResponseWrapper<>("Driver created successfully",user):
-                            new ResponseWrapper<>("Account already exists",null);
+                    if (accountRepo.isNicExist(user.getNic())) {
+                        return new ResponseWrapper<>("Nic No already exists",null);
+                    }else if (accountRepo.isDriverLicenseExist(user.getDriverLicense())) {
+                        return new ResponseWrapper<>("Driver License already exists",null);
+                    }
+                    else{
+                        DriverInsertDTO dto = DriverMapper.getInstance().toDriverInsertDto(user);
+                        dto.setEmploymentType("Freelancer");
+                        responseWrapper =  accountRepo.addNewDriver(dto)?
+                                new ResponseWrapper<>("Driver created successfully",user):
+                                new ResponseWrapper<>("Account already exists",null);
+                    }
                     break;
                 case "Admin":
                     break;

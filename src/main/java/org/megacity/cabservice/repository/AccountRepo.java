@@ -2,6 +2,7 @@ package org.megacity.cabservice.repository;
 
 import org.megacity.cabservice.config.DatabaseConnection;
 import org.megacity.cabservice.dto.admin_dto.AdminResponseDTO;
+import org.megacity.cabservice.dto.driver_dto.DriverDetailDTO;
 import org.megacity.cabservice.dto.driver_dto.DriverInsertDTO;
 import org.megacity.cabservice.dto.driver_dto.DriverResponseDTO;
 import org.megacity.cabservice.dto.user_dto.UserInsertDTO;
@@ -13,6 +14,8 @@ import org.megacity.cabservice.model.PasswordWrapper;
 import org.megacity.cabservice.model.User;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountRepo {
 
@@ -31,6 +34,38 @@ public class AccountRepo {
         }
 
     }
+    public boolean isNicExist(String nic) {
+        String sql = "SELECT * FROM account WHERE nic = ?";
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, nic);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next();
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking nic existence: " + e.getMessage(), e);
+        }
+
+    }
+
+    public boolean isDriverLicenseExist(String driverLicense) {
+        String sql = "SELECT * FROM account WHERE driver_license = ?";
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, driverLicense);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next();
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking driver license existence: " + e.getMessage(), e);
+        }
+
+    }
+
 
     public PasswordWrapper<User> getUserByEmail(String email) {
         String sql = "SELECT * FROM account WHERE email = ?";
@@ -121,8 +156,8 @@ public class AccountRepo {
 
     public Boolean addNewDriver(DriverInsertDTO driver) {
         String sql = "INSERT INTO account " +
-                "(email, first_name, last_name, password, contact_number, user_type, driver_license, nic, address, created_at) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, now())";
+                "(email, first_name, last_name, password, contact_number, user_type, driver_license, nic, address,employment_type, created_at) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now())";
 
         try (Connection con = DatabaseConnection.connection();
              PreparedStatement statement = con.prepareStatement(sql)) {
@@ -132,10 +167,11 @@ public class AccountRepo {
             statement.setString(3, driver.getLastName());
             statement.setString(4, driver.getPassword());
             statement.setString(5, driver.getContactNumber());
-            statement.setString(6, driver.getDriverLicense());
-            statement.setString(7, driver.getNic());
-            statement.setString(8, driver.getAddress());
-            statement.setString(9, "Driver");
+            statement.setString(6, driver.getUserType());
+            statement.setString(7, driver.getDriverLicense());
+            statement.setString(8, driver.getNic());
+            statement.setString(9, driver.getAddress());
+            statement.setString(10, driver.getEmploymentType());
 
             int rowsInserted = statement.executeUpdate();
             return rowsInserted > 0;
@@ -143,5 +179,132 @@ public class AccountRepo {
         } catch (SQLException e) {
             throw new RuntimeException("Error inserting user: " + e.getMessage(), e);
         }
+    }
+
+    public List<DriverDetailDTO> getAllDrivers() {
+        String sql = "SELECT * FROM account WHERE user_type = ?";
+        List<DriverDetailDTO> drivers = null;
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, "Driver");
+            drivers = getDriverDetailDTOS(statement);
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking email existence: " + e.getMessage(), e);
+        }
+
+
+        return drivers;
+    }
+
+    public List<DriverDetailDTO> getPortionOfDriver(String limit, String offset) {
+        String sql = "SELECT * FROM account WHERE user_type = ? LIMIT ? OFFSET ?";
+        List<DriverDetailDTO> drivers = null;
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, "Driver");
+            statement.setInt(2, Integer.parseInt(limit));
+            statement.setInt(3, Integer.parseInt(offset));
+            drivers = getDriverDetailDTOS(statement);
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking email existence: " + e.getMessage(), e);
+        }
+
+
+        return drivers;
+    }
+
+    public List<DriverDetailDTO> getPortionOfDriverWithStatus(String limit, String offset, String status) {
+        String sql = "SELECT * FROM account WHERE user_type = ? AND status = ? LIMIT ? OFFSET ?";
+        List<DriverDetailDTO> drivers = null;
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, "Driver");
+            statement.setString(2, status);
+            statement.setInt(3, Integer.parseInt(limit));
+            statement.setInt(4, Integer.parseInt(offset));
+            drivers = getDriverDetailDTOS(statement);
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking email existence: " + e.getMessage(), e);
+        }
+
+
+        return drivers;
+    }
+
+    private List<DriverDetailDTO> getDriverDetailDTOS(PreparedStatement statement) throws SQLException {
+        List<DriverDetailDTO> drivers = new ArrayList<>();
+        try (ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+
+                DriverDetailDTO detailDTO = new DriverDetailDTO(
+                        resultSet.getString("first_name"),
+                        resultSet.getString("last_name"),
+                        resultSet.getString("email"),
+                        resultSet.getString("contact_number"),
+                        resultSet.getString("user_type"),
+                        resultSet.getString("status"),
+                        resultSet.getString("driver_license"),
+                        resultSet.getString("nic"),
+                        resultSet.getString("address"),
+                        resultSet.getString("employment_type"),
+                        resultSet.getString("updated_at"),
+                        resultSet.getString("created_at")
+                );
+                drivers.add(detailDTO);
+            }
+        }
+        return drivers;
+    }
+
+    public List<DriverDetailDTO> getDriversBySearch(String keyword) {
+        String sql = "SELECT * FROM account WHERE user_type = ? AND (first_name LIKE ?  OR last_name LIKE ? OR nic LIKE ? OR driver_license LIKE ?)";
+        List<DriverDetailDTO> drivers = null;
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, "Driver");
+            statement.setString(2, "%" + keyword + "%");
+            statement.setString(3, "%" + keyword + "%");
+            statement.setString(4, "%" + keyword + "%");
+            statement.setString(5, "%" + keyword + "%");
+
+            drivers = getDriverDetailDTOS(statement);
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking email existence: " + e.getMessage(), e);
+        }
+
+        return drivers;
+    }
+
+    public List<DriverDetailDTO> getDriversBySearchWithStatus(String keyword, String status) {
+        String sql = "SELECT * FROM account WHERE user_type = ? AND status = ? AND (first_name LIKE ?  OR last_name LIKE ? OR nic LIKE ? OR driver_license LIKE ?)";
+        List<DriverDetailDTO> drivers = null;
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, "Driver");
+            statement.setString(2, status);
+            statement.setString(3, "%" + keyword + "%");
+            statement.setString(4, "%" + keyword + "%");
+            statement.setString(5, "%" + keyword + "%");
+            statement.setString(6, "%" + keyword + "%");
+
+            drivers = getDriverDetailDTOS(statement);
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking email existence: " + e.getMessage(), e);
+        }
+
+        return drivers;
     }
 }

@@ -63,10 +63,18 @@ public class DriverInsertDTO {
         return address;
     }
 
+    public String getUserType(){
+        return userType;
+    }
+
     public String getEmploymentType() {
         return employmentType;
     }
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setEmploymentType(String employmentType) {
+        this.employmentType = employmentType;
     }
 }

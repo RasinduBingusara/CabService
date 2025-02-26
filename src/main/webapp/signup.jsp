@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    String usertype = request.getAttribute("type")!=null? (String) request.getAttribute("type") :"customer";
+    String usertype = request.getAttribute("type")!=null? (String) request.getAttribute("type") :"Customer";
     User user = (User) request.getAttribute("user");
 %>
 <html>
