@@ -1,5 +1,8 @@
-
+<%@ page import="org.megacity.cabservice.dto.driver_dto.DriverInsertDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+  DriverInsertDTO newDriver = (DriverInsertDTO) request.getAttribute("user");
+%>
 <html>
 <head>
     <title>Title</title>
@@ -12,13 +15,16 @@
 
     <form action="drivers" method="post">
       <label for="firstname">First Name:</label>
-      <input type="text" id="firstname" name="first_name" placeholder="Enter first name" required>
+      <input type="text" id="firstname" name="first_name" placeholder="Enter first name"
+             value='<%= newDriver!=null? newDriver.getFirstName():""%>' required>
 
       <label for="lastname">Last Name:</label>
-      <input type="text" id="lastname" name="last_name" placeholder="Enter last name" required>
+      <input type="text" id="lastname" name="last_name" placeholder="Enter last name"
+             value='<%= newDriver!=null? newDriver.getLastName():""%>' required>
 
       <label for="email">Email:</label>
-      <input type="email" id="email" name="email" placeholder="Enter email" required>
+      <input type="email" id="email" name="email" placeholder="Enter email"
+             value='<%= newDriver!=null? newDriver.getEmail():""%>' required>
 
       <label for="password">Password:</label>
       <input type="password" id="password" name="password" placeholder="Enter password" required>
@@ -27,27 +33,25 @@
       <input type="password" id="confirmpassword" name="confirm_password" placeholder="Re-enter password" required>
 
       <label for="contactnumber">Contact Number:</label>
-      <input type="tel" id="contactnumber" name="contact_number" placeholder="Enter contact number" required>
+      <input type="tel" id="contactnumber" name="contact_number" placeholder="Enter contact number"
+             value='<%= newDriver!=null? newDriver.getContactNumber():""%>' required>
 
       <label for="nic">NIC Number:</label>
-      <input type="text" id="nic" name="nic" placeholder="Enter NIC number" required>
+      <input type="text" id="nic" name="nic" placeholder="Enter NIC number"
+             value='<%= newDriver!=null? newDriver.getNic():""%>' required>
 
       <label for="driverlicense">Driver License:</label>
-      <input type="text" id="driverlicense" name="driver_license" placeholder="Enter driver license number" required>
+      <input type="text" id="driverlicense" name="driver_license" placeholder="Enter driver license number"
+             value='<%= newDriver!=null? newDriver.getDriverLicense():""%>' required>
 
       <label for="address">Address:</label>
-      <textarea id="address" name="address" placeholder="Enter full address" rows="3" required></textarea>
+      <textarea id="address" name="address" placeholder="Enter full address" rows="3" required><%= newDriver!=null? newDriver.getAddress():""%></textarea>
 
         <%
             String error = (String) request.getAttribute("error");
-            String message = (String) request.getAttribute("message");
             if(error != null){
         %>
         <p><%= error%></p>
-        <%
-            } else if (message != null) {
-        %>
-        <p><%= message%></p>
         <%
             }
         %>

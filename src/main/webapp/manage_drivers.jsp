@@ -208,6 +208,7 @@
       searchTable();
     }
   }
+
   function fetchUsers() {
     offset = 10;
     count = 0;

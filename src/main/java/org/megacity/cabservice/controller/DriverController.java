@@ -38,9 +38,10 @@ public class DriverController extends HttpServlet {
         ResponseWrapper<User> responseWrapper = driverAccService.addEmployeeDriverAcc(driver, confirmPassword);
         if(responseWrapper.getData() != null) {
             req.setAttribute("message", responseWrapper.getMessage());
-            req.getRequestDispatcher("drivers?action=all").forward(req, resp);
+            resp.sendRedirect("drivers?action=view");
         }
         else {
+            req.setAttribute("user", driver);
             req.setAttribute("error", responseWrapper.getMessage());
             req.getRequestDispatcher( "add_driver.jsp").forward(req, resp);
         }

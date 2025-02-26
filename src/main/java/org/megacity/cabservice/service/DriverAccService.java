@@ -25,7 +25,6 @@ public class DriverAccService {
                 accountRepo.getDriversBySearchWithStatus(keyword,status);
     }
     public ResponseWrapper<User> addEmployeeDriverAcc(DriverInsertDTO user, String confirmPassword) {
-        ResponseWrapper<User> responseWrapper = null;
         if(!PasswordUtill.isValidPassword(user.getPassword())) {
             String error = "At least one uppercase letter (A-Z) </br>" +
                     "At least one lowercase letter (a-z) </br>" +
@@ -39,15 +38,17 @@ public class DriverAccService {
             return new ResponseWrapper<>(error,null);
         }
         else if(accountRepo.isEmailExist(user.getEmail())) {
+            System.out.println("email already exist: " + user.getEmail());
             return new ResponseWrapper<>("Email already exists",null);
         } else if (accountRepo.isNicExist(user.getNic())) {
-            return new ResponseWrapper<>("Nic No already exists",null);
+            return new ResponseWrapper<>("Nic no already exists",null);
         }else if (accountRepo.isDriverLicenseExist(user.getDriverLicense())) {
             return new ResponseWrapper<>("Driver License already exists",null);
         }
         else{
             String hashedPassword = PasswordUtill.hashPassword(user.getPassword());
             user.setPassword(hashedPassword);
+            System.out.println("User creating for: " + user.getEmail());
             if(accountRepo.addNewDriver(user)){
                 return new ResponseWrapper<>("Successfully added driver",
                         DriverMapper.getInstance().toEntity(user));
