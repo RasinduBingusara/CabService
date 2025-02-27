@@ -30,4 +30,13 @@
         <servlet-name>DriverController</servlet-name>
         <url-pattern>/drivers</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>modelController</servlet-name>
+        <servlet-class>org.megacity.cabservice.controller.VehicleModelController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>modelController</servlet-name>
+        <url-pattern>/model</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -22,6 +22,11 @@
       <input type="submit" value="Manage Drivers">
     </form>
 
+    <form action="model" method="get">
+      <input type="hidden" name="action" value="view">
+      <input type="submit" value="Manage Vehicle Model">
+    </form>
+
     <form action="login" method="get">
       <input type="submit" value="Logout">
     </form>

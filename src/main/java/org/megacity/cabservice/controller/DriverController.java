@@ -63,7 +63,7 @@ public class DriverController extends HttpServlet {
         else if(action.equals("portion")) {
 
             List<DriverDetailDTO> dto = driverAccService.getPortionOfDrivers(limit, offset, status);
-            String jsonList = JsonBuilder.buildJsonList(dto);
+            String jsonList = JsonBuilder.driverDetailDtoToJson(dto);
 
             resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
@@ -75,7 +75,7 @@ public class DriverController extends HttpServlet {
             System.out.println("Status:" + status);
             String keyword = req.getParameter("keyword");
             List<DriverDetailDTO> dto = driverAccService.getDriversBySearch(keyword,status);
-            String jsonList = JsonBuilder.buildJsonList(dto);
+            String jsonList = JsonBuilder.driverDetailDtoToJson(dto);
 
             System.out.println(jsonList);
 
