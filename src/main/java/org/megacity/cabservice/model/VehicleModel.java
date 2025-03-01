@@ -24,6 +24,11 @@ public class VehicleModel {
         this.addedAt = addedAt;
     }
 
+    public VehicleModel(String modelId, String modelName) {
+        this.modelId = modelId;
+        this.modelName = modelName;
+    }
+
     public String getModelId() {
         return modelId;
     }

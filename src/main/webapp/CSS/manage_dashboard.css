@@ -4,7 +4,7 @@ h2 {
     margin-bottom: 20px;
 }
 
-.add-driver-btn {
+.add-btn {
     background-color: #ffcc00;
     color: #333;
     padding: 10px 15px;
@@ -15,12 +15,12 @@ h2 {
     transition: 0.3s;
 }
 
-.add-driver-btn:hover {
+.add-btn:hover {
     background-color: #333;
     color: #ffcc00;
 }
 
-#searchDriver {
+.searchBar {
     width: 100%;
     padding: 10px;
     font-size: 16px;

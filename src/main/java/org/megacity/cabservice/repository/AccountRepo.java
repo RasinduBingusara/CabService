@@ -246,6 +246,7 @@ public class AccountRepo {
             while (resultSet.next()) {
 
                 DriverDetailDTO detailDTO = new DriverDetailDTO(
+                        resultSet.getString("uid"),
                         resultSet.getString("first_name"),
                         resultSet.getString("last_name"),
                         resultSet.getString("email"),

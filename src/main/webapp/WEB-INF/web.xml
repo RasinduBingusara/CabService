@@ -39,4 +39,14 @@
         <servlet-name>modelController</servlet-name>
         <url-pattern>/model</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>vehicleController</servlet-name>
+        <servlet-class>org.megacity.cabservice.controller.VehicleController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>vehicleController</servlet-name>
+        <url-pattern>/vehicles</url-pattern>
+    </servlet-mapping>
+
 </web-app>

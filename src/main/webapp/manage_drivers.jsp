@@ -18,7 +18,7 @@
     <button class="add-driver-btn">+ Add Driver</button>
   </a>
 
-    <input type="text" id="searchDriver" placeholder="Search by Name, NIC or License..." onkeyup="searchTable()">
+    <input type="text" id="searchDriver" class="searchBar" placeholder="Search by Name, NIC or License..." onkeyup="searchTable()">
     <select id="statusFilter" name="statusFilter" onchange="onChangeStatus()">
         <option value="">All</option>
         <option value="Active">Active</option>

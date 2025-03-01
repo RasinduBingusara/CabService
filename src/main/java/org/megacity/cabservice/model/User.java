@@ -17,6 +17,15 @@ public class User {
     private String updatedAt;
     private String createdAt;
 
+    public User() {
+    }
+
+    public User(String id, String firstName, String lastName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public String getId() {
         return id;
     }

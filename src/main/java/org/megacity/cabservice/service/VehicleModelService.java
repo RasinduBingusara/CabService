@@ -39,7 +39,7 @@ public class VehicleModelService {
 
     public String getAllVehicleModelsInJason() {
         List<ModelDetailsDto> allVehicleModels = vehicleModelRepo.getAllVehicleModels();
-        return JsonBuilder.modelDetailDtoToJson(allVehicleModels);
+        return JsonBuilder.getInstance().modelDetailDtoToJson(allVehicleModels);
     }
     public VehicleModel getVehicleModelById(int id) {
         return null;
