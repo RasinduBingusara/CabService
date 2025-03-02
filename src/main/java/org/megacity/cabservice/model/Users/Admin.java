@@ -5,6 +5,6 @@ import org.megacity.cabservice.model.User;
 public class Admin extends User implements UserNotificationListner{
     @Override
     public void update(String message) {
-        System.out.println(getFirstName() + " " + getLastName() + ": " + message );
+        System.out.println("Notification: " + getFirstName() + " " + getLastName() + "-> " + message);
     }
 }
