@@ -49,4 +49,13 @@
         <url-pattern>/vehicles</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>bookingController</servlet-name>
+        <servlet-class>org.megacity.cabservice.controller.BookingController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>bookingController</servlet-name>
+        <url-pattern>/bookings</url-pattern>
+    </servlet-mapping>
+
 </web-app>

@@ -30,6 +30,11 @@ public class Vehicle {
         this.added_At = added_At;
     }
 
+    public Vehicle(String id, String plate_no) {
+        this.id = id;
+        this.plate_no = plate_no;
+    }
+
     public String getId() {
         return id;
     }

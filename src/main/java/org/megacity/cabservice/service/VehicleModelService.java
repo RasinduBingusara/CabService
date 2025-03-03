@@ -2,7 +2,7 @@ package org.megacity.cabservice.service;
 
 import org.megacity.cabservice.dto.model_dto.ModelDetailsDto;
 import org.megacity.cabservice.dto.model_dto.ModelInsertDto;
-import org.megacity.cabservice.model.ResponseWrapper;
+import org.megacity.cabservice.model.Wrappers.ResponseWrapper;
 import org.megacity.cabservice.model.VehicleModel;
 import org.megacity.cabservice.repository.VehicleModelRepo;
 import org.megacity.cabservice.util.JsonBuilder;

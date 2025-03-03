@@ -5,8 +5,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.megacity.cabservice.dto.model_dto.ModelInsertDto;
-import org.megacity.cabservice.model.ResponseWrapper;
-import org.megacity.cabservice.model.VehicleModel;
+import org.megacity.cabservice.model.Wrappers.ResponseWrapper;
 import org.megacity.cabservice.service.VehicleModelService;
 
 import java.io.IOException;

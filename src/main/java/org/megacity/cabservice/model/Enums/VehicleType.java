@@ -1,4 +1,4 @@
-package org.megacity.cabservice.model;
+package org.megacity.cabservice.model.Enums;
 
 public enum VehicleType {
     Sedan,

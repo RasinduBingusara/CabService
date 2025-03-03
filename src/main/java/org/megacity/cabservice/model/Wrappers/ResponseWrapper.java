@@ -1,4 +1,4 @@
-package org.megacity.cabservice.model;
+package org.megacity.cabservice.model.Wrappers;
 
 public class ResponseWrapper<T> {
 

@@ -10,7 +10,7 @@ import org.megacity.cabservice.dto.user_dto.UserResponseDTO;
 import org.megacity.cabservice.mapper.AdminMapper;
 import org.megacity.cabservice.mapper.DriverMapper;
 import org.megacity.cabservice.mapper.UserMapper;
-import org.megacity.cabservice.model.PasswordWrapper;
+import org.megacity.cabservice.model.Wrappers.PasswordWrapper;
 import org.megacity.cabservice.model.User;
 
 import java.sql.*;

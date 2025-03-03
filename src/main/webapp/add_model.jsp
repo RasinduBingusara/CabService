@@ -1,5 +1,5 @@
 <%@ page import="org.megacity.cabservice.dto.model_dto.ModelInsertDto" %>
-<%@ page import="org.megacity.cabservice.model.VehicleType" %><%--
+<%@ page import="org.megacity.cabservice.model.Enums.VehicleType" %><%--
   Created by IntelliJ IDEA.
   User: Rasindu
   Date: 14/02/2025

@@ -3,6 +3,7 @@ package org.megacity.cabservice.util;
 import org.megacity.cabservice.dto.driver_dto.DriverDetailDTO;
 import org.megacity.cabservice.dto.model_dto.ModelDetailsDto;
 import org.megacity.cabservice.dto.vehicle_dto.VehicleDetailsDto;
+import org.megacity.cabservice.model.Booking;
 
 import java.util.List;
 
@@ -39,6 +40,16 @@ public class JsonBuilder{
     }
 
     public String vehicleDetailDtoToJson(List<VehicleDetailsDto> list){
+        StringBuilder jsonList = new StringBuilder("[");
+        for (int i = 0; i < list.size(); i++) {
+            jsonList.append(list.get(i).toJson());
+            if (i < list.size() - 1) jsonList.append(",");
+        }
+        jsonList.append("]");
+        return jsonList.toString();
+    }
+
+    public String bookingsToJson(List<Booking> list){
         StringBuilder jsonList = new StringBuilder("[");
         for (int i = 0; i < list.size(); i++) {
             jsonList.append(list.get(i).toJson());
