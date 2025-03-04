@@ -58,4 +58,13 @@
         <url-pattern>/bookings</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>profileController</servlet-name>
+        <servlet-class>org.megacity.cabservice.controller.ProfileController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>profileController</servlet-name>
+        <url-pattern>/profile</url-pattern>
+    </servlet-mapping>
+
 </web-app>

@@ -4,6 +4,7 @@ import org.megacity.cabservice.dto.driver_dto.DriverInsertDTO;
 import org.megacity.cabservice.dto.user_dto.UserAuthDTO;
 import org.megacity.cabservice.mapper.DriverMapper;
 import org.megacity.cabservice.mapper.UserMapper;
+import org.megacity.cabservice.model.Wrappers.BooleanWrapper;
 import org.megacity.cabservice.model.Wrappers.PasswordWrapper;
 import org.megacity.cabservice.model.Wrappers.ResponseWrapper;
 import org.megacity.cabservice.model.User;
@@ -79,5 +80,21 @@ public class AccountService {
 
             return responseWrapper;
         }
+    }
+
+    public BooleanWrapper updateAccountPassword(String email, String password, String confirmPassword) {
+
+        if(!password.equals(confirmPassword)) {
+            return new BooleanWrapper("Password and Confirm Password must be same",false);
+        }
+        else{
+            PasswordWrapper<User> response = accountRepo.getUserByEmail(email);
+            if(response.getData() != null) {
+                String hashedPassword = PasswordUtill.hashPassword(password);
+                return accountRepo.updatePassword(response.getData().getEmail(),hashedPassword)? new BooleanWrapper("Password updated successfully",true)
+                        : new BooleanWrapper("Password update failed",false);
+            }
+        }
+        return new BooleanWrapper("Password update failed",false);
     }
 }

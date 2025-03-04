@@ -4,6 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.megacity.cabservice.dto.user_dto.UserAuthDTO;
 import org.megacity.cabservice.model.Wrappers.ResponseWrapper;
 import org.megacity.cabservice.model.User;
@@ -25,6 +26,8 @@ public class LoginController extends HttpServlet {
         ResponseWrapper<User> authResponse = accountService.login(userAuthDTO);
 
         if(authResponse.getData() != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("user", authResponse.getData());
             switch (authResponse.getData().getUserType()){
                 case "Customer":
                     request.setAttribute("message", authResponse.getMessage());

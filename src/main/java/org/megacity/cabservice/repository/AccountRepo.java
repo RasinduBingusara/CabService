@@ -128,6 +128,24 @@ public class AccountRepo {
         return new PasswordWrapper<>(password, user);
     }
 
+    public Boolean updatePassword(String email, String newPassword) {
+        String sql = "UPDATE account SET passwrod = ? WHERE email = ?";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, email);
+            statement.setString(2, newPassword);
+
+            int rowsInserted = statement.executeUpdate();
+
+            return rowsInserted > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating user: " + e.getMessage(), e);
+        }
+    }
+
 
 
     public Boolean addNewCustomer(UserInsertDTO user) {
