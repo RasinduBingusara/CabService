@@ -39,6 +39,7 @@ public class UserMapper {
 
     public User toEntity(UserResponseDTO dto){
         User user = new User();
+        user.setId(dto.getId());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
@@ -50,6 +51,7 @@ public class UserMapper {
 
     public UserResponseDTO toUserResponseDTO(User entity){
         UserResponseDTO dto = new UserResponseDTO(
+                entity.getId(),
                 entity.getFirstName(),
                 entity.getLastName(),
                 entity.getEmail(),

@@ -21,7 +21,7 @@ public class BookingRepo {
         String sql = "INSERT INTO booking" +
                 "(customer_id, user_id, car_id, pickup_location, destination, " +
                 "distance, pickup_time, status, booked_at) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?,  now())";
+                "VALUES (?, ?, ?, ?, ?, ?, now(), ?,  now())";
 
         try (Connection con = DatabaseConnection.connection();
              PreparedStatement statement = con.prepareStatement(sql)) {
@@ -32,8 +32,7 @@ public class BookingRepo {
             statement.setString(4, booking.getPickupLocation());
             statement.setString(5, booking.getDestination());
             statement.setDouble(6, booking.getDistance());
-            statement.setString(7, booking.getPickupTime());
-            statement.setString(8, booking.getStatus());
+            statement.setString(7, booking.getStatus());
 
             int rowsInserted = statement.executeUpdate();
 

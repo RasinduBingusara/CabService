@@ -36,11 +36,15 @@ public class VehicleRepo {
         try (Connection con = DatabaseConnection.connection();
              PreparedStatement statement = con.prepareStatement(sql)) {
 
+            System.err.println("id: " + id);
             statement.setString(1, id);
-            statement.setString(1, status);
-            ResultSet rs = statement.executeQuery();
-            if (rs.next()) {
-                return true;
+            statement.setString(2, status);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    System.err.println("Vehicle already exists with plate no: " + id);
+                    return true;
+                }
             }
 
         } catch (SQLException e) {
@@ -74,6 +78,26 @@ public class VehicleRepo {
         } catch (SQLException e) {
             throw new RuntimeException("Error inserting new vehicle: " + e.getMessage(), e);
         }
+    }
+
+    public double getVehiclePricePerKm(String vehicleId) {
+        String sql = "SELECT price_per_km FROM vehicle WHERE id = ?";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, vehicleId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getDouble("price_per_km");
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error while getting vehicle price per km: " + e.getMessage(), e);
+        }
+        return -1;
     }
 
     public List<VehicleDetailsDto> getAllVehicles() {

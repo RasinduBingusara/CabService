@@ -8,6 +8,8 @@ public class FareCalculator {
     }
 
     public double calculateFare(double distance) {
-        return pricingCalc.calculatePrice(distance);
+        double price = pricingCalc.calculatePrice(distance);
+        double factor = Math.pow(10, 2);
+        return Math.ceil(price * factor) / factor;
     }
 }

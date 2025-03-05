@@ -9,6 +9,11 @@
     </form>
 
     <form action="customer_bookings" method="get">
+      <input type="hidden" name="action" value="add">
+      <input type="submit" value="Add Booking">
+    </form>
+
+    <form action="customer_bookings" method="get">
       <input type="hidden" name="action" value="view">
       <input type="submit" value="Bookings">
     </form>

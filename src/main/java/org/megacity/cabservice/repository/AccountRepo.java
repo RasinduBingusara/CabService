@@ -83,6 +83,7 @@ public class AccountRepo {
                         case "Customer":
 
                             UserResponseDTO responseDTO = new UserResponseDTO(
+                                    resultSet.getString("uid"),
                                     resultSet.getString("first_name"),
                                     resultSet.getString("last_name"),
                                     resultSet.getString("email"),

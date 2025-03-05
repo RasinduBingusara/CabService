@@ -49,7 +49,7 @@
 <script>
     function fetchBookings() {
 
-        fetch("customer_bookings?action=history&id=45")
+        fetch("customer_bookings?action=history")
             .then(response => response.json())
             .then(data => {
                 let container = document.getElementById("table-container")

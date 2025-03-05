@@ -57,4 +57,6 @@ public class BookingInsertDto {
     public String getStatus() {
         return status;
     }
+
+
 }

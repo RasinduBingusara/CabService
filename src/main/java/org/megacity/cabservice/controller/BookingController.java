@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.megacity.cabservice.dto.booking_dto.BookingInsertDto;
 import org.megacity.cabservice.model.Booking;
+import org.megacity.cabservice.model.Pricing.RegularPrice;
 import org.megacity.cabservice.model.User;
 import org.megacity.cabservice.model.Wrappers.ResponseWrapper;
 import org.megacity.cabservice.service.BookingService;
@@ -20,28 +21,7 @@ public class BookingController extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        BookingInsertDto newBooking = new BookingInsertDto(
-                user.getId(),
-                user.getId(),
-                request.getParameter("vehicle_id"),
-                request.getParameter("pickup_location"),
-                request.getParameter("destination"),
-                null,
-                Double.parseDouble(request.getParameter("distance")),
-                "Pending"
-        );
 
-        ResponseWrapper<BookingInsertDto> responseWrapper = bookingService.addNewBooking(newBooking);
-        if(responseWrapper.getData() == null){
-            request.setAttribute("message", responseWrapper.getMessage());
-            request.getRequestDispatcher("path").forward(request, response);
-        }
-        else{
-            request.setAttribute("error", responseWrapper.getMessage());
-            request.getRequestDispatcher("path").forward(request, response);
-        }
 
     }
 
@@ -87,6 +67,22 @@ public class BookingController extends HttpServlet {
                 out.flush();
                 out.close();
                 break;
+            case "calculate":
+                double distance = Double.parseDouble(req.getParameter("distance"));
+                double discount = req.getParameter("discount")!=null ? Double.parseDouble(req.getParameter("discount")):-1;
+                String vehicleId = req.getParameter("vehicle_id");
+
+                System.out.println("Calculating");
+                System.out.println("vehicle id: " + vehicleId);
+                System.out.println("distance: " + distance);
+                json = bookingService.getPriceOfBookingInJson(distance,vehicleId,discount);
+                System.out.println(json);
+                res.setContentType("application/json");
+                res.setCharacterEncoding("UTF-8");
+
+                out.print(json);
+                out.flush();
+                out.close();
         }
 
     }
