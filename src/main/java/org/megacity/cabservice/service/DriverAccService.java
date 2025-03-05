@@ -26,7 +26,7 @@ public class DriverAccService {
     }
 
     public ResponseWrapper<User> addEmployeeDriverAcc(DriverInsertDTO user, String confirmPassword) {
-        if(!PasswordUtill.isValidPassword(user.getPassword())) {
+        if(!PasswordUtill.getInstance().isValidPassword(user.getPassword())) {
             String error = "At least one uppercase letter (A-Z) </br>" +
                     "At least one lowercase letter (a-z) </br>" +
                     "At least one digit (0-9) </br>" +
@@ -47,7 +47,7 @@ public class DriverAccService {
             return new ResponseWrapper<>("Driver License already exists",null);
         }
         else{
-            String hashedPassword = PasswordUtill.hashPassword(user.getPassword());
+            String hashedPassword = PasswordUtill.getInstance().hashPassword(user.getPassword());
             user.setPassword(hashedPassword);
             System.out.println("User creating for: " + user.getEmail());
             if(accountRepo.addNewDriver(user)){

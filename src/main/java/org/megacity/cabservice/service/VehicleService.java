@@ -38,6 +38,11 @@ public class VehicleService {
         return JsonBuilder.getInstance().vehicleDetailDtoToJson(vehicles);
     }
 
+    public String getVehiclesByStatusInJson(String status) {
+        List<VehicleDetailsDto> vehicles = vehicleRepo.getVehiclesByStatus(status);
+        return JsonBuilder.getInstance().vehicleDetailDtoToJson(vehicles);
+    }
+
     public String getVehiclesBySearch(String keyword, String status){
         System.out.println("Keyword: " + keyword);
         List<VehicleDetailsDto> vehicles = status.isEmpty()? vehicleRepo.getVehiclesBySearch(keyword):

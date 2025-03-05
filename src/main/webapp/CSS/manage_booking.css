@@ -1,0 +1,93 @@
+.booking-container {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 80px;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.search-filter {
+    margin-bottom: 10px;
+    text-align: right;
+}
+
+.search-filter input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 250px;
+}
+
+.table-container {
+    max-height: 350px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #ffcc00;
+    color: #333;
+    font-weight: bold;
+}
+
+tr:hover {
+    background: #f1f1f1;
+}
+
+.edit-btn, .cancel-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.edit-btn {
+    background: #007bff;
+    color: white;
+}
+
+.edit-btn:hover {
+    background: #0056b3;
+}
+
+.cancel-btn {
+    background: #afafaf;
+    color: white;
+    margin-left: 5px;
+}
+
+.cancel-btn:hover {
+    background: #919191;
+}
+
+@media (max-width: 768px) {
+    .search-filter {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .search-filter input {
+        width: 100%;
+    }
+}

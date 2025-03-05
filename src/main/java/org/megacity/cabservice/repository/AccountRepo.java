@@ -5,6 +5,7 @@ import org.megacity.cabservice.dto.admin_dto.AdminResponseDTO;
 import org.megacity.cabservice.dto.driver_dto.DriverDetailDTO;
 import org.megacity.cabservice.dto.driver_dto.DriverInsertDTO;
 import org.megacity.cabservice.dto.driver_dto.DriverResponseDTO;
+import org.megacity.cabservice.dto.user_dto.UserDetailDTO;
 import org.megacity.cabservice.dto.user_dto.UserInsertDTO;
 import org.megacity.cabservice.dto.user_dto.UserResponseDTO;
 import org.megacity.cabservice.mapper.AdminMapper;
@@ -65,7 +66,6 @@ public class AccountRepo {
         }
 
     }
-
 
     public PasswordWrapper<User> getUserByEmail(String email) {
         String sql = "SELECT * FROM account WHERE email = ?";
@@ -129,20 +129,20 @@ public class AccountRepo {
     }
 
     public Boolean updatePassword(String email, String newPassword) {
-        String sql = "UPDATE account SET passwrod = ? WHERE email = ?";
+        String sql = "UPDATE account SET password = ? WHERE email = ?";
 
         try (Connection con = DatabaseConnection.connection();
              PreparedStatement statement = con.prepareStatement(sql)) {
 
-            statement.setString(1, email);
-            statement.setString(2, newPassword);
+            statement.setString(1, newPassword);
+            statement.setString(2, email);
 
             int rowsInserted = statement.executeUpdate();
 
             return rowsInserted > 0;
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error updating user: " + e.getMessage(), e);
+            throw new RuntimeException("Error updating password: " + e.getMessage(), e);
         }
     }
 
@@ -197,6 +197,32 @@ public class AccountRepo {
         } catch (SQLException e) {
             throw new RuntimeException("Error inserting user: " + e.getMessage(), e);
         }
+    }
+
+    public UserDetailDTO getUserDetails(String email) {
+        String sql = "SELECT * FROM account WHERE email = ?";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, email);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+
+                    return new UserDetailDTO(
+                            resultSet.getString("first_name"),
+                            resultSet.getString("last_name"),
+                            resultSet.getString("email"),
+                            resultSet.getString("contact_number")
+                    );
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking email existence: " + e.getMessage(), e);
+        }
+        return null;
+
     }
 
     public List<DriverDetailDTO> getAllDrivers() {

@@ -66,6 +66,9 @@ public class VehicleController extends HttpServlet {
         String status= req.getParameter("status");
         String keyword = req.getParameter("keyword");
 
+        String json;
+        PrintWriter out = res.getWriter();
+
         switch (action) {
             case "view":
                 req.getRequestDispatcher("manage_vehicle.jsp").forward(req,res);
@@ -76,26 +79,34 @@ public class VehicleController extends HttpServlet {
                 req.getRequestDispatcher("add_vehicle.jsp").forward(req,res);
                 break;
             case "portion":
-                String json = vehicleService.getPortionOfVehicles(limit,offset,status);
+                json = vehicleService.getPortionOfVehicles(limit,offset,status);
                 res.setContentType("application/json");
                 res.setCharacterEncoding("UTF-8");
 
-                PrintWriter out = res.getWriter();
+
                 out.print(json);
                 out.flush();
                 out.close();
                 break;
             case "search":
                 System.out.println("Searching");
-                String searchJson = vehicleService.getVehiclesBySearch(keyword,status);
-                System.out.println(searchJson);
+                json = vehicleService.getVehiclesBySearch(keyword,status);
+                System.out.println(json);
                 res.setContentType("application/json");
                 res.setCharacterEncoding("UTF-8");
 
-                PrintWriter outs = res.getWriter();
-                outs.print(searchJson);
-                outs.flush();
-                outs.close();
+                out.print(json);
+                out.flush();
+                out.close();
+                break;
+            case "filter":
+                json = vehicleService.getVehiclesByStatusInJson(status);
+                res.setContentType("application/json");
+                res.setCharacterEncoding("UTF-8");
+
+                out.print(json);
+                out.flush();
+                out.close();
                 break;
         }
     }

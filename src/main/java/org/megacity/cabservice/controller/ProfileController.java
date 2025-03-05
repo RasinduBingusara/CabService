@@ -6,26 +6,73 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.megacity.cabservice.model.User;
+import org.megacity.cabservice.model.Wrappers.BooleanWrapper;
+import org.megacity.cabservice.service.AccountService;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class ProfileController extends HttpServlet {
 
+    AccountService accountService = new AccountService();
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String update = req.getParameter("update");
+        String action = req.getParameter("action");
         HttpSession session = req.getSession();
         User loggedUser = (User) session.getAttribute("user");
 
-        switch (update) {
-            case "password":
 
-                break;
+        if(action.equals("update")){
+            String newPassword = req.getParameter("newpassword");
+            String confirmPassword = req.getParameter("confirmpassword");
+
+            BooleanWrapper booleanWrapper = accountService.updateAccountPassword(loggedUser.getEmail(), newPassword, confirmPassword);
+            if(booleanWrapper.isValue()){
+                req.setAttribute("message",booleanWrapper.getMessage());
+                req.getRequestDispatcher("customer_profile.jsp").forward(req, resp);
+            }
+            else{
+                req.setAttribute("error",booleanWrapper.getMessage());
+                req.getRequestDispatcher("customer_profile.jsp").forward(req, resp);
+            }
+        }
+        else if(action.equals("logout")){
+            System.out.println("Logged out");
+            session.removeAttribute("user");
+            resp.sendRedirect("/");
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("customer_profile.jsp").forward(request, response);
+
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        String action = request.getParameter("action");
+        String id = user.getId();
+        String json = "";
+        PrintWriter out = response.getWriter();
+
+        if(user != null) {
+            switch (action) {
+                case "view":
+                    request.getRequestDispatcher("customer_profile.jsp").forward(request, response);
+                    break;
+                case "history":
+                    json = accountService.getProfileInfoInJson(user.getEmail());
+                    System.out.println(json);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+
+                    out.print(json);
+                    out.flush();
+                    out.close();
+                    break;
+            }
+        }
+
+
     }
 }

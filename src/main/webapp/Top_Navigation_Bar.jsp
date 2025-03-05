@@ -7,7 +7,7 @@
   <nav>
     <div class="logo">Mega City Cab</div>
 
-    <ul class="nav-links">
+    <ul class="top-nav-links">
       <li><a href="home.jsp">Home</a></li>
       <li><a href="#services">Services</a></li>
       <li><a href="#about">About Us</a></li>
@@ -26,8 +26,9 @@
       <li class="profile-menu">
         <a href="#"> <%= loggedUser.getFirstName() %></a>
         <ul class="profile-dropdown">
-          <li><a href="profile.jsp">Profile</a></li>
-          <form action="login" method="get">
+          <li><a href="profile?action=view">Profile</a></li>
+          <form action="profile" method="post">
+            <input type="hidden" name="action" value="logout">
             <input type="submit" value="logout">
           </form>
         </ul>
@@ -67,6 +68,7 @@
     padding: 10px 20px;
     max-width: 1200px;
     margin: auto;
+    flex-direction: row;
   }
 
   .logo {
@@ -75,19 +77,19 @@
     color: #333;
   }
 
-  .nav-links {
+  .top-nav-links {
     list-style: none;
     display: flex;
     gap: 20px;
     padding: 0;
   }
 
-  .nav-links li {
+  .top-nav-links li {
     display: inline-block;
     position: relative;
   }
 
-  .nav-links a {
+  .top-nav-links a {
     color: #333;
     text-decoration: none;
     font-size: 18px;
@@ -96,7 +98,7 @@
     transition: background 0.3s, color 0.3s;
   }
 
-  .nav-links a:hover {
+  .top-nav-links a:hover {
     background: #333;
     color: #ffcc00;
   }

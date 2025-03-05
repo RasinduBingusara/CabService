@@ -2,6 +2,7 @@ package org.megacity.cabservice.service;
 
 import org.megacity.cabservice.dto.driver_dto.DriverInsertDTO;
 import org.megacity.cabservice.dto.user_dto.UserAuthDTO;
+import org.megacity.cabservice.dto.user_dto.UserDetailDTO;
 import org.megacity.cabservice.mapper.DriverMapper;
 import org.megacity.cabservice.mapper.UserMapper;
 import org.megacity.cabservice.model.Wrappers.BooleanWrapper;
@@ -19,7 +20,7 @@ public class AccountService {
         PasswordWrapper<User> response = accountRepo.getUserByEmail(userAuthDTO.getEmail());
         if(response.getData() != null) {
 
-            if(PasswordUtill.checkPassword(userAuthDTO.getPassword(), response.getPassword())) {
+            if(PasswordUtill.getInstance().checkPassword(userAuthDTO.getPassword(), response.getPassword())) {
                 return new ResponseWrapper<>("User logged in successfully",response.getData());
             }
             else{
@@ -35,7 +36,7 @@ public class AccountService {
     public ResponseWrapper<User> createAccount(User user, String confirmPassword) {
 
         ResponseWrapper<User> responseWrapper = null;
-        if(!PasswordUtill.isValidPassword(user.getPassword())) {
+        if(!PasswordUtill.getInstance().isValidPassword(user.getPassword())) {
             String error = "At least one uppercase letter (A-Z) </br>" +
                     "At least one lowercase letter (a-z) </br>" +
                     "At least one digit (0-9) </br>" +
@@ -51,7 +52,7 @@ public class AccountService {
             return new ResponseWrapper<>("User already exists",null);
         }
         else{
-            String hashedPassword = PasswordUtill.hashPassword(user.getPassword());
+            String hashedPassword = PasswordUtill.getInstance().hashPassword(user.getPassword());
             user.setPassword(hashedPassword);
 
             switch (user.getUserType()){
@@ -82,19 +83,39 @@ public class AccountService {
         }
     }
 
-    public BooleanWrapper updateAccountPassword(String email, String password, String confirmPassword) {
+    public BooleanWrapper updateAccountPassword(String email, String newPassword, String confirmPassword) {
 
-        if(!password.equals(confirmPassword)) {
+        if(!accountRepo.isEmailExist(email)) {
+            return new BooleanWrapper("Email not exists",false);
+        }
+        else if(!newPassword.equals(confirmPassword)) {
             return new BooleanWrapper("Password and Confirm Password must be same",false);
+        }
+        else if (!PasswordUtill.getInstance().isValidPassword(newPassword)) {
+            System.out.println("new password: " + newPassword);
+            String error = "At least one uppercase letter (A-Z) </br>" +
+                    "At least one lowercase letter (a-z) </br>" +
+                    "At least one digit (0-9) </br>" +
+                    "At least one special character </br>" +
+                    "Minimum 8 characters in length";
+            return new BooleanWrapper(error,false);
         }
         else{
             PasswordWrapper<User> response = accountRepo.getUserByEmail(email);
             if(response.getData() != null) {
-                String hashedPassword = PasswordUtill.hashPassword(password);
+                String hashedPassword = PasswordUtill.getInstance().hashPassword(newPassword);
                 return accountRepo.updatePassword(response.getData().getEmail(),hashedPassword)? new BooleanWrapper("Password updated successfully",true)
                         : new BooleanWrapper("Password update failed",false);
             }
         }
         return new BooleanWrapper("Password update failed",false);
+    }
+
+    public String getProfileInfoInJson(String email) {
+        UserDetailDTO userDetailDTO = accountRepo.getUserDetails(email);
+        if(userDetailDTO != null) {
+            return userDetailDTO.toJson();
+        }
+        return "{}";
     }
 }

@@ -13,6 +13,42 @@ import java.util.List;
 
 public class VehicleRepo {
 
+    public boolean isPlateNoExist(String plateNo) {
+        String sql = "SELECT * FROM vehicle WHERE plate_no = ?";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, plateNo);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking plate no exist: " + e.getMessage(), e);
+        }
+        return false;
+    }
+
+    public boolean checkVehicleAvailabilityByStatus(String id, String status) {
+        String sql = "SELECT * FROM vehicle WHERE id = ? AND status = ?";
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, id);
+            statement.setString(1, status);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking vehicle availability by status: " + e.getMessage(), e);
+        }
+        return false;
+    }
+
     public boolean addVehicle(VehicleInsertDto vehicle) {
         String sql = "INSERT INTO vehicle(model, color, plate_no, seat_count, availability, price_per_km, liter_per_km, driver_id, owner_id, added_at) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, now())";
@@ -40,23 +76,6 @@ public class VehicleRepo {
         }
     }
 
-    public boolean isPlateNoExist(String plateNo) {
-        String sql = "SELECT * FROM vehicle WHERE plate_no = ?";
-
-        try (Connection con = DatabaseConnection.connection();
-             PreparedStatement statement = con.prepareStatement(sql)) {
-
-            statement.setString(1, plateNo);
-            ResultSet rs = statement.executeQuery();
-            if (rs.next()) {
-                return true;
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Error checking plate no exist: " + e.getMessage(), e);
-        }
-        return false;
-    }
     public List<VehicleDetailsDto> getAllVehicles() {
         String sql = "SELECT v.id, v.model AS model_id, vm.model_name, v.color, v.plate_no, v.seat_count, " +
                 "v.availability, v.price_per_km, v.liter_per_km, v.driver_id, d.first_name AS driver_first_name, " +
@@ -73,6 +92,27 @@ public class VehicleRepo {
 
         } catch (SQLException e) {
             throw new RuntimeException("Error while getting all vehicles: " + e.getMessage(), e);
+        }
+        return vehicles;
+    }
+    public List<VehicleDetailsDto> getVehiclesByStatus(String status) {
+        String sql = "SELECT v.id, v.model AS model_id, vm.model_name, v.color, v.plate_no, v.seat_count, " +
+                "v.availability, v.price_per_km, v.liter_per_km, v.driver_id, d.first_name AS driver_first_name, " +
+                "d.last_name AS driver_last_name, v.owner_id, o.first_name AS owner_first_name, " +
+                "o.last_name AS owner_last_name, v.status, v.updated_at, v.added_at FROM vehicle v " +
+                "JOIN vehicle_model vm ON v.model = vm.model_id JOIN account d ON v.driver_id = d.uid " +
+                "JOIN account o ON v.owner_id = o.uid " +
+                "WHERE v.status = ?";
+
+        List<VehicleDetailsDto> vehicles = new ArrayList<>();
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, status);
+            vehicles = getVehicleDetailsDto(statement);
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error while getting vehicles by status: " + e.getMessage(), e);
         }
         return vehicles;
     }

@@ -1,6 +1,7 @@
 package org.megacity.cabservice.repository;
 
 import org.megacity.cabservice.config.DatabaseConnection;
+import org.megacity.cabservice.dto.booking_dto.BookingInsertDto;
 import org.megacity.cabservice.dto.vehicle_dto.VehicleDetailsDto;
 import org.megacity.cabservice.model.*;
 import org.megacity.cabservice.model.Users.Customer;
@@ -15,6 +16,82 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookingRepo {
+
+    public boolean addNewBooking(BookingInsertDto booking) {
+        String sql = "INSERT INTO booking" +
+                "(customer_id, user_id, car_id, pickup_location, destination, " +
+                "distance, pickup_time, status, booked_at) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?,  now())";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, booking.getCustomerId());
+            statement.setString(2, booking.getUserId());
+            statement.setString(3, booking.getVehicleId());
+            statement.setString(4, booking.getPickupLocation());
+            statement.setString(5, booking.getDestination());
+            statement.setDouble(6, booking.getDistance());
+            statement.setString(7, booking.getPickupTime());
+            statement.setString(8, booking.getStatus());
+
+            int rowsInserted = statement.executeUpdate();
+
+            return rowsInserted > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error inserting new booking: " + e.getMessage(), e);
+        }
+    }
+
+    public List<Booking> getBookingsByCustomerId(String customerId, String status) {
+        String sql = "SELECT b.id AS booking_id, c.uid AS customer_id, c.first_name AS customer_first_name, " +
+                "c.last_name AS customer_last_name, u.uid AS user_id, u.first_name AS user_first_name, " +
+                "u.last_name AS user_last_name, v.id AS vehicle_id, v.plate_no, t.id AS transaction_id, " +
+                "t.amount, b.pickup_location, b.destination, b.distance,b.pickup_time,b.destination_time,b.status, b.booked_at FROM booking b " +
+                "JOIN account c ON b.customer_id = c.uid JOIN account u ON b.user_id = u.uid JOIN vehicle v " +
+                "ON b.car_id = v.id LEFT JOIN `transaction` t ON b.transaction_id = t.id " +
+                "WHERE c.uid = ? AND b.status = ?";
+        List<Booking> bookings = null;
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, customerId);
+            statement.setString(1, status);
+
+            bookings = getBookingsFromStatement(statement);
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting bookings by customer id: " + e.getMessage(), e);
+        }
+
+        return bookings;
+    }
+
+    public List<Booking> getBookingsByCustomerId(String customerId) {
+        String sql = "SELECT b.id AS booking_id, c.uid AS customer_id, c.first_name AS customer_first_name, " +
+                "c.last_name AS customer_last_name, u.uid AS user_id, u.first_name AS user_first_name, " +
+                "u.last_name AS user_last_name, v.id AS vehicle_id, v.plate_no, t.id AS transaction_id, " +
+                "t.amount, b.pickup_location, b.destination, b.distance,b.pickup_time,b.destination_time,b.status, b.booked_at FROM booking b " +
+                "JOIN account c ON b.customer_id = c.uid JOIN account u ON b.user_id = u.uid JOIN vehicle v " +
+                "ON b.car_id = v.id LEFT JOIN `transaction` t ON b.transaction_id = t.id " +
+                "WHERE c.uid = ?";
+        List<Booking> bookings = null;
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, customerId);
+
+            bookings = getBookingsFromStatement(statement);
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting bookings by customer id: " + e.getMessage(), e);
+        }
+
+        return bookings;
+    }
 
     public List<Booking> getPortionOfBookings(String limit, String offset) {
         String sql = "SELECT b.id AS booking_id, c.uid AS customer_id, c.first_name AS customer_first_name, " +
@@ -112,6 +189,32 @@ public class BookingRepo {
             statement.setString(1, status);
             statement.setString(2, "%" + keyword + "%");
             statement.setString(3, "%" + keyword + "%");
+
+            bookings = getBookingsFromStatement(statement);
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting searching bookings: " + e.getMessage(), e);
+        }
+        return bookings;
+    }
+
+    public List<Booking> getBookingsByEmail(String email){
+        String sql = "SELECT b.id AS booking_id, c.uid AS customer_id, c.first_name AS customer_first_name, " +
+                "c.last_name AS customer_last_name, u.uid AS user_id, u.first_name AS user_first_name, " +
+                "u.last_name AS user_last_name, v.id AS vehicle_id, v.plate_no, t.id AS transaction_id, " +
+                "t.amount, b.pickup_location, b.destination, b.distance, b.pickup_time, b.destination_time, " +
+                "b.status, b.booked_at FROM booking b " +
+                "JOIN account c ON b.customer_id = c.uid " +
+                "JOIN account u ON b.user_id = u.uid " +
+                "JOIN vehicle v ON b.car_id = v.id " +
+                "LEFT JOIN `transaction` t ON b.transaction_id = t.id " +
+                "WHERE c.email = ?;";
+        List<Booking> bookings = null;
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, email);
 
             bookings = getBookingsFromStatement(statement);
 
