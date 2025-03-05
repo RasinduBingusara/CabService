@@ -14,6 +14,7 @@ public class BookingInsertDto {
     private String pickupTime;
     private double distance;
     private String status;
+    private String transactionId;
 
     public BookingInsertDto(String customerId, String userId, String vehicleId, String pickupLocation, String destination, String pickupTime, double distance, String status) {
         this.customerId = customerId;
@@ -58,5 +59,11 @@ public class BookingInsertDto {
         return status;
     }
 
+    public String getTransactionId() {
+        return transactionId;
+    }
 
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
 }

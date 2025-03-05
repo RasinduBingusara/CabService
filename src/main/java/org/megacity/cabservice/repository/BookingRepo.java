@@ -19,9 +19,9 @@ public class BookingRepo {
 
     public boolean addNewBooking(BookingInsertDto booking) {
         String sql = "INSERT INTO booking" +
-                "(customer_id, user_id, car_id, pickup_location, destination, " +
+                "(customer_id, user_id, car_id,transaction_id, pickup_location, destination, " +
                 "distance, pickup_time, status, booked_at) " +
-                "VALUES (?, ?, ?, ?, ?, ?, now(), ?,  now())";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, now(), ?,  now())";
 
         try (Connection con = DatabaseConnection.connection();
              PreparedStatement statement = con.prepareStatement(sql)) {
@@ -29,10 +29,11 @@ public class BookingRepo {
             statement.setString(1, booking.getCustomerId());
             statement.setString(2, booking.getUserId());
             statement.setString(3, booking.getVehicleId());
-            statement.setString(4, booking.getPickupLocation());
-            statement.setString(5, booking.getDestination());
-            statement.setDouble(6, booking.getDistance());
-            statement.setString(7, booking.getStatus());
+            statement.setString(4, booking.getTransactionId());
+            statement.setString(5, booking.getPickupLocation());
+            statement.setString(6, booking.getDestination());
+            statement.setDouble(7, booking.getDistance());
+            statement.setString(8, booking.getStatus());
 
             int rowsInserted = statement.executeUpdate();
 

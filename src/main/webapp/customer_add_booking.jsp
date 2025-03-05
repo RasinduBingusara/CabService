@@ -62,13 +62,20 @@
                 <p id="priceDisplay">Rs. 0.00</p>
             </div>
 
+            <div class="form-group2" style="margin-top: 20px; display: none" id="payment_selection">
+                <label>Payment Method:</label>
+                <div><input type="radio" name="payment" value="Cash"> <p>Cash</p></div>
+                <div><input type="radio" name="payment" value="Card"> <p>Card</p></div>
+            </div>
+
             <div class="form-actions" style="display: none" id="submit_btn">
                 <button type="submit" class="submit-btn">Add Booking</button>
             </div>
         </form>
         <div class="form-group" style="margin-top: 20px" id="calculate_btn">
-            <button class="submit-btn" onclick="calculatePrice()">Caculate Price</button>
+            <button class="submit-btn" onclick="calculatePrice()">Calculate Price</button>
         </div>
+
     </div>
 </div>
 
@@ -77,6 +84,7 @@
     function onValueChange(){
         document.getElementById("calculate_btn").setAttribute("style","display: block;margin-top: 20px");
         document.getElementById("submit_btn").setAttribute("style","display: none")
+        document.getElementById("payment_selection").setAttribute("style","margin-top: 20px; display: none")
     }
     function calculatePrice(){
         let pickup = document.getElementById("pickup_location").value;
@@ -94,6 +102,7 @@
                 .then(data => {
                     priceDisplay.textContent = "Rs. " + data.total;
                     document.getElementById("submit_btn").setAttribute("style","display: block")
+                    document.getElementById("payment_selection").setAttribute("style","display: block")
                     document.getElementById("calculate_btn").setAttribute("style","display: none")
                 })
                 .catch(error => console.error("Error fetching total:", error));

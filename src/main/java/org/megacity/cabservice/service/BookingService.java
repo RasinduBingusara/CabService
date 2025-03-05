@@ -7,12 +7,10 @@ import org.megacity.cabservice.model.Pricing.DiscountPrice;
 import org.megacity.cabservice.model.Pricing.FareCalculator;
 import org.megacity.cabservice.model.Pricing.PricingCalc;
 import org.megacity.cabservice.model.Pricing.RegularPrice;
+import org.megacity.cabservice.model.Transaction;
 import org.megacity.cabservice.model.Wrappers.BooleanWrapper;
 import org.megacity.cabservice.model.Wrappers.ResponseWrapper;
-import org.megacity.cabservice.repository.AccountRepo;
-import org.megacity.cabservice.repository.BookingRepo;
-import org.megacity.cabservice.repository.TaxRepo;
-import org.megacity.cabservice.repository.VehicleRepo;
+import org.megacity.cabservice.repository.*;
 import org.megacity.cabservice.util.JsonBuilder;
 
 import java.util.List;
@@ -23,6 +21,7 @@ public class BookingService {
     private VehicleRepo vehicleRepo = new VehicleRepo();
     private AccountRepo accountRepo = new AccountRepo();
     private TaxRepo taxRepo = new TaxRepo();
+    private TransactionRepo transactionRepo = new TransactionRepo();
 
     public String getPortionOfBookingsInJson(String limit,String offset, String status){
         List<Booking> bookings = status.isEmpty()? bookingRepo.getPortionOfBookings(limit, offset):
@@ -44,11 +43,19 @@ public class BookingService {
 
     }
 
-    public ResponseWrapper<BookingInsertDto> addNewBooking(BookingInsertDto booking){
+    public ResponseWrapper<BookingInsertDto> addNewBooking(BookingInsertDto booking, Transaction transaction){
         if(vehicleRepo.checkVehicleAvailabilityByStatus(booking.getVehicleId(),"Active")){
 
-            return bookingRepo.addNewBooking(booking)? new ResponseWrapper<>("Booking added successfully", null)
-                    :new ResponseWrapper<>("Booking adding failed", booking);
+            transaction.setAmount(calculateFare(booking.getDistance(),booking.getVehicleId(),-1));
+            int transactionId = transactionRepo.addTransaction(transaction);
+            booking.setTransactionId(String.valueOf(transactionId));
+            if(bookingRepo.addNewBooking(booking)){
+
+                return new ResponseWrapper<>("Booking added successfully", null);
+            }
+            else{
+                return new ResponseWrapper<>("Booking adding failed", booking);
+            }
         }
         else
             return new ResponseWrapper<>("Vehicle already in a trip", booking);
@@ -87,6 +94,21 @@ public class BookingService {
 
         return json;
 
+    }
+
+    private double calculateFare(double distance, String vehicleId, double discount){
+        PricingCalc pricingCalc;
+        double price_per_km = vehicleRepo.getVehiclePricePerKm(vehicleId);
+        double tax = taxRepo.getTaxByKeyName("Service Tax");
+        if(discount!=-1){
+            pricingCalc = new RegularPrice(price_per_km,tax);
+        }
+        else{
+            pricingCalc = new DiscountPrice(discount,price_per_km,tax);
+        }
+
+        FareCalculator calculator = new FareCalculator(pricingCalc);
+        return calculator.calculateFare(distance);
     }
 
     private String escapeJson(String value) {

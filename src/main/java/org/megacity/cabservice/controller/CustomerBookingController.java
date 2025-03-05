@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.megacity.cabservice.dto.booking_dto.BookingInsertDto;
+import org.megacity.cabservice.model.Transaction;
 import org.megacity.cabservice.model.User;
 import org.megacity.cabservice.model.Wrappers.ResponseWrapper;
 import org.megacity.cabservice.service.BookingService;
@@ -30,8 +31,10 @@ public class CustomerBookingController extends HttpServlet {
                 Double.parseDouble(request.getParameter("distance")),
                 "Pending"
         );
+        Transaction newTransaction = new Transaction();
+        newTransaction.setPaymentMethod(request.getParameter("payment"));
 
-        ResponseWrapper<BookingInsertDto> responseWrapper = bookingService.addNewBooking(newBooking);
+        ResponseWrapper<BookingInsertDto> responseWrapper = bookingService.addNewBooking(newBooking,newTransaction);
         if(responseWrapper.getData() == null){
             request.setAttribute("message", responseWrapper.getMessage());
             request.getRequestDispatcher("customer_manage_booking.jsp").forward(request, response);
