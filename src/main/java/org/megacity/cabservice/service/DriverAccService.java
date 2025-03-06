@@ -24,6 +24,10 @@ public class DriverAccService {
         return status.isEmpty()? accountRepo.getDriversBySearch(keyword):
                 accountRepo.getDriversBySearchWithStatus(keyword,status);
     }
+    public String getDriverByIdInJson(String driverId) {
+        DriverDetailDTO driver = accountRepo.getDriverById(driverId);
+        return driver.toJson();
+    }
 
     public ResponseWrapper<User> addEmployeeDriverAcc(DriverInsertDTO user, String confirmPassword) {
         if(!PasswordUtill.getInstance().isValidPassword(user.getPassword())) {

@@ -245,6 +245,38 @@ public class AccountRepo {
         return drivers;
     }
 
+    public DriverDetailDTO getDriverById(String id) {
+        String sql = "SELECT * FROM account WHERE uid = ?";
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new DriverDetailDTO(
+                            resultSet.getString("uid"),
+                            resultSet.getString("first_name"),
+                            resultSet.getString("last_name"),
+                            resultSet.getString("email"),
+                            resultSet.getString("contact_number"),
+                            resultSet.getString("user_type"),
+                            resultSet.getString("status"),
+                            resultSet.getString("driver_license"),
+                            resultSet.getString("nic"),
+                            resultSet.getString("address"),
+                            resultSet.getString("employment_type"),
+                            resultSet.getString("updated_at"),
+                            resultSet.getString("created_at")
+                    );
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking email existence: " + e.getMessage(), e);
+        }
+        return null;
+    }
+
     public List<DriverDetailDTO> getPortionOfDriver(String limit, String offset) {
         String sql = "SELECT * FROM account WHERE user_type = ? LIMIT ? OFFSET ?";
         List<DriverDetailDTO> drivers = null;

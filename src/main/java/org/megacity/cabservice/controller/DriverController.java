@@ -53,37 +53,47 @@ public class DriverController extends HttpServlet {
         String status = req.getParameter("status");
 
 
-        if(action.equals("view")) {
-            req.getRequestDispatcher("manage_drivers.jsp").forward(req, resp);
-        }
-        else if(action.equals("add")) {
-            req.getRequestDispatcher("add_driver.jsp").forward(req, resp);
-        }
-        else if(action.equals("portion")) {
+        switch (action) {
+            case "view" -> req.getRequestDispatcher("manage_drivers.jsp").forward(req, resp);
+            case "add" -> req.getRequestDispatcher("add_driver.jsp").forward(req, resp);
+            case "portion" -> {
 
-            List<DriverDetailDTO> dto = driverAccService.getPortionOfDrivers(limit, offset, status);
-            String jsonList = JsonBuilder.getInstance().driverDetailDtoToJson(dto);
+                List<DriverDetailDTO> dto = driverAccService.getPortionOfDrivers(limit, offset, status);
+                String jsonList = JsonBuilder.getInstance().driverDetailDtoToJson(dto);
 
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
+                resp.setContentType("application/json");
+                resp.setCharacterEncoding("UTF-8");
 
-            PrintWriter out = resp.getWriter();
-            out.print(jsonList);
-            out.flush();
-        } else if (action.equals("search")) {
-            System.out.println("Status:" + status);
-            String keyword = req.getParameter("keyword");
-            List<DriverDetailDTO> dto = driverAccService.getDriversBySearch(keyword,status);
-            String jsonList = JsonBuilder.getInstance().driverDetailDtoToJson(dto);
+                PrintWriter out = resp.getWriter();
+                out.print(jsonList);
+                out.flush();
+            }
+            case "search" -> {
+                System.out.println("Status:" + status);
+                String keyword = req.getParameter("keyword");
+                List<DriverDetailDTO> dto = driverAccService.getDriversBySearch(keyword, status);
+                String jsonList = JsonBuilder.getInstance().driverDetailDtoToJson(dto);
 
-            System.out.println(jsonList);
+                System.out.println(jsonList);
 
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
+                resp.setContentType("application/json");
+                resp.setCharacterEncoding("UTF-8");
 
-            PrintWriter out = resp.getWriter();
-            out.print(jsonList);
-            out.flush();
+                PrintWriter out = resp.getWriter();
+                out.print(jsonList);
+                out.flush();
+            }
+            case "single" -> {
+                String driverId = req.getParameter("id");
+                String driverJson = driverAccService.getDriverByIdInJson(driverId);
+                System.out.println("Single Driver: "+driverJson);
+                resp.setContentType("application/json");
+                resp.setCharacterEncoding("UTF-8");
+
+                PrintWriter out = resp.getWriter();
+                out.print(driverJson);
+                out.flush();
+            }
         }
     }
 }
