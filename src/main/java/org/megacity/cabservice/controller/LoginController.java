@@ -35,7 +35,7 @@ public class LoginController extends HttpServlet {
                     break;
                 case "Driver":
                     request.setAttribute("message", authResponse.getMessage());
-                    request.getRequestDispatcher("driver_dashboard.jsp").forward(request, response);
+                    request.getRequestDispatcher("driver_manage_booking.jsp").forward(request, response);
                     break;
                 case "Admin":
                     request.setAttribute("message", authResponse.getMessage());

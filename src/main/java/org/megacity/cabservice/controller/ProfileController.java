@@ -57,8 +57,11 @@ public class ProfileController extends HttpServlet {
 
         if(user != null) {
             switch (action) {
-                case "view":
+                case "c":
                     request.getRequestDispatcher("customer_profile.jsp").forward(request, response);
+                    break;
+                case "d":
+                    request.getRequestDispatcher("driver_profile.jsp").forward(request, response);
                     break;
                 case "history":
                     json = accountService.getProfileInfoInJson(user.getEmail());

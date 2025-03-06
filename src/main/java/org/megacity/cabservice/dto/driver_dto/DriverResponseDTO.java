@@ -2,6 +2,7 @@ package org.megacity.cabservice.dto.driver_dto;
 
 public class DriverResponseDTO {
 
+    private String id;
     private String firstName;
     private String lastName;
     private String email;
@@ -13,7 +14,8 @@ public class DriverResponseDTO {
     private static final String userType = "Driver";
 
 
-    public DriverResponseDTO(String firstName, String lastName, String email, String contactNumber, String status, String driverLicense, String nic, String address) {
+    public DriverResponseDTO(String id, String firstName, String lastName, String email, String contactNumber, String status, String driverLicense, String nic, String address) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -22,6 +24,10 @@ public class DriverResponseDTO {
         this.driverLicense = driverLicense;
         this.nic = nic;
         this.address = address;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getFirstName() {

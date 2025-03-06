@@ -96,6 +96,7 @@ public class AccountRepo {
 
                         case "Driver":
                             DriverResponseDTO response = new DriverResponseDTO(
+                                    resultSet.getString("uid"),
                                     resultSet.getString("first_name"),
                                     resultSet.getString("last_name"),
                                     resultSet.getString("email"),

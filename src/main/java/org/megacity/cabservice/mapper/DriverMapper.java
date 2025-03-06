@@ -113,6 +113,7 @@ public class DriverMapper {
 
     public User toEntity(DriverResponseDTO dto){
         User driver = new User();
+        driver.setId(dto.getId());
         driver.setFirstName(dto.getFirstName());
         driver.setLastName(dto.getLastName());
         driver.setEmail(dto.getEmail());
@@ -127,6 +128,7 @@ public class DriverMapper {
 
     public DriverResponseDTO toDriverResponseDto(User entity){
         DriverResponseDTO dto = new DriverResponseDTO(
+                entity.getId(),
                 entity.getFirstName(),
                 entity.getLastName(),
                 entity.getEmail(),

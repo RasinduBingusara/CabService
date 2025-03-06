@@ -67,6 +67,11 @@ public class BookingService {
 
     }
 
+    public String getBookingsByDriverId(String driverId){
+        List<Booking> bookings = bookingRepo.getBookingsByDriverId(driverId);
+        return JsonBuilder.getInstance().bookingsToJson(bookings);
+    }
+
     public String getBookingsByCustomerIdAndStatus(String customerId, String status){
         List<Booking> bookings = bookingRepo.getBookingsByCustomerId(customerId,status);
         return JsonBuilder.getInstance().bookingsToJson(bookings);

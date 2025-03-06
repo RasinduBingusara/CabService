@@ -76,4 +76,13 @@
         <url-pattern>/customer_bookings</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>driverBookingController</servlet-name>
+        <servlet-class>org.megacity.cabservice.controller.DriverBookingController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>driverBookingController</servlet-name>
+        <url-pattern>/driver_bookings</url-pattern>
+    </servlet-mapping>
+
 </web-app>

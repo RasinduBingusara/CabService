@@ -93,6 +93,30 @@ public class BookingRepo {
         return bookings;
     }
 
+    public List<Booking> getBookingsByDriverId(String id) {
+        String sql = "SELECT b.id AS booking_id, c.uid AS customer_id, c.first_name AS customer_first_name, " +
+                "c.last_name AS customer_last_name, u.uid AS user_id, u.first_name AS user_first_name, " +
+                "u.last_name AS user_last_name, v.id AS vehicle_id, v.plate_no, t.id AS transaction_id, " +
+                "t.amount, b.pickup_location, b.destination, b.distance,b.pickup_time,b.destination_time,b.status, b.booked_at FROM booking b " +
+                "JOIN account c ON b.customer_id = c.uid JOIN account u ON b.user_id = u.uid JOIN vehicle v " +
+                "ON b.car_id = v.id LEFT JOIN `transaction` t ON b.transaction_id = t.id " +
+                "WHERE v.driver_id = ?";
+        List<Booking> bookings = null;
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+            System.err.println("getting bookings by driver id: " + id);
+            statement.setString(1, id);
+
+            bookings = getBookingsFromStatement(statement);
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting bookings by driver id: " + e.getMessage(), e);
+        }
+
+        return bookings;
+    }
+
     public List<Booking> getPortionOfBookings(String limit, String offset) {
         String sql = "SELECT b.id AS booking_id, c.uid AS customer_id, c.first_name AS customer_first_name, " +
                 "c.last_name AS customer_last_name, u.uid AS user_id, u.first_name AS user_first_name, " +

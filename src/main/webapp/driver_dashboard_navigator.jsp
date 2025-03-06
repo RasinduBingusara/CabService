@@ -4,18 +4,13 @@
   <ul class="nav-links">
 
     <form action="profile" method="get">
-      <input type="hidden" name="action" value="view">
+      <input type="hidden" name="action" value="d">
       <input type="submit" value="Profile">
     </form>
 
-    <form action="customer_bookings" method="get">
-      <input type="hidden" name="action" value="add">
-      <input type="submit" value="Add Booking">
-    </form>
-
-    <form action="customer_bookings" method="get">
-      <input type="hidden" name="action" value="c">
-      <input type="submit" value="Bookings">
+    <form action="driver_bookings" method="get">
+      <input type="hidden" name="action" value="view">
+      <input type="submit" value="Manage Bookings">
     </form>
 
     <form action="profile" method="post">
