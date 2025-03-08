@@ -21,27 +21,28 @@ public class DriverBookingController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        BookingInsertDto newBooking = new BookingInsertDto(
-                user.getId(),
-                user.getId(),
-                request.getParameter("vehicle"),
-                request.getParameter("pickup_location"),
-                request.getParameter("destination"),
-                null,
-                Double.parseDouble(request.getParameter("distance")),
-                "Pending"
-        );
-        Transaction newTransaction = new Transaction();
-        newTransaction.setPaymentMethod(request.getParameter("payment"));
 
-        ResponseWrapper<BookingInsertDto> responseWrapper = bookingService.addNewBooking(newBooking,newTransaction);
-        if(responseWrapper.getData() == null){
-            request.setAttribute("message", responseWrapper.getMessage());
-            request.getRequestDispatcher("customer_manage_booking.jsp").forward(request, response);
-        }
-        else{
-            request.setAttribute("error", responseWrapper.getMessage());
-            request.getRequestDispatcher("customer_add_booking.jsp").forward(request, response);
+        String action = request.getParameter("action");
+        String bookingId = request.getParameter("booking_id");
+
+        switch (action) {
+            case "accept":
+                bookingService.setBookingStatusByBookingId(bookingId,"Confirmed");
+                request.getRequestDispatcher("driver_manage_booking.jsp").forward(request, response);
+                break;
+            case "cancel":
+                bookingService.setBookingStatusByBookingId(bookingId,"Cancelled");
+                request.getRequestDispatcher("driver_manage_booking.jsp").forward(request, response);
+                break;
+            case "completed":
+                System.err.println("Completed");
+                bookingService.setBookingStatusByBookingId(bookingId,"Completed");
+                request.getRequestDispatcher("driver_manage_booking.jsp").forward(request, response);
+                break;
+            case "paid":
+                bookingService.setBookingStatusByBookingId(bookingId,"Paid");
+                request.getRequestDispatcher("driver_manage_booking.jsp").forward(request, response);
+                break;
         }
     }
 

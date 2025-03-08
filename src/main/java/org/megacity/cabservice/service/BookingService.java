@@ -43,6 +43,16 @@ public class BookingService {
 
     }
 
+    public boolean setBookingStatusByBookingId(String id,String status){
+        return bookingRepo.setBookingStatusByBookingId(id,status);
+    }
+    public boolean payBookingByBookingId(String bookingId, String transactionId){
+        if(transactionRepo.updatePaidTime(transactionId)){
+            return bookingRepo.setBookingStatusByBookingId(bookingId,"Paid");
+        }
+        return false;
+    }
+
     public ResponseWrapper<BookingInsertDto> addNewBooking(BookingInsertDto booking, Transaction transaction){
         if(vehicleRepo.checkVehicleAvailabilityByStatus(booking.getVehicleId(),"Active")){
 

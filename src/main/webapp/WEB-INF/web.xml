@@ -85,4 +85,13 @@
         <url-pattern>/driver_bookings</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>paymentController</servlet-name>
+        <servlet-class>org.megacity.cabservice.controller.PaymentController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>paymentController</servlet-name>
+        <url-pattern>/payment</url-pattern>
+    </servlet-mapping>
+
 </web-app>

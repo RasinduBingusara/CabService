@@ -44,11 +44,29 @@ public class BookingRepo {
         }
     }
 
+    public boolean setBookingStatusByBookingId(String id, String status) {
+        String sql = "UPDATE booking SET status = ? WHERE id = ?";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, status);
+            statement.setString(2, id);
+            System.out.println("Booking status: " + status);
+            int rowsInserted = statement.executeUpdate();
+
+            return rowsInserted > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating new booking: " + e.getMessage(), e);
+        }
+    }
+
     public List<Booking> getBookingsByCustomerId(String customerId, String status) {
         String sql = "SELECT b.id AS booking_id, c.uid AS customer_id, c.first_name AS customer_first_name, " +
                 "c.last_name AS customer_last_name, u.uid AS user_id, u.first_name AS user_first_name, " +
                 "u.last_name AS user_last_name, v.id AS vehicle_id, v.plate_no, t.id AS transaction_id, " +
-                "t.amount, b.pickup_location, b.destination, b.distance,b.pickup_time,b.destination_time,b.status, b.booked_at FROM booking b " +
+                "t.amount, t.payment_method, b.pickup_location, b.destination, b.distance,b.pickup_time,b.destination_time,b.status, b.booked_at FROM booking b " +
                 "JOIN account c ON b.customer_id = c.uid JOIN account u ON b.user_id = u.uid JOIN vehicle v " +
                 "ON b.car_id = v.id LEFT JOIN `transaction` t ON b.transaction_id = t.id " +
                 "WHERE c.uid = ? AND b.status = ?";
@@ -73,7 +91,7 @@ public class BookingRepo {
         String sql = "SELECT b.id AS booking_id, c.uid AS customer_id, c.first_name AS customer_first_name, " +
                 "c.last_name AS customer_last_name, u.uid AS user_id, u.first_name AS user_first_name, " +
                 "u.last_name AS user_last_name, v.id AS vehicle_id, v.plate_no, t.id AS transaction_id, " +
-                "t.amount, b.pickup_location, b.destination, b.distance,b.pickup_time,b.destination_time,b.status, b.booked_at FROM booking b " +
+                "t.amount, t.payment_method, b.pickup_location, b.destination, b.distance,b.pickup_time,b.destination_time,b.status, b.booked_at FROM booking b " +
                 "JOIN account c ON b.customer_id = c.uid JOIN account u ON b.user_id = u.uid JOIN vehicle v " +
                 "ON b.car_id = v.id LEFT JOIN `transaction` t ON b.transaction_id = t.id " +
                 "WHERE c.uid = ?";
@@ -97,7 +115,7 @@ public class BookingRepo {
         String sql = "SELECT b.id AS booking_id, c.uid AS customer_id, c.first_name AS customer_first_name, " +
                 "c.last_name AS customer_last_name, u.uid AS user_id, u.first_name AS user_first_name, " +
                 "u.last_name AS user_last_name, v.id AS vehicle_id, v.plate_no, t.id AS transaction_id, " +
-                "t.amount, b.pickup_location, b.destination, b.distance,b.pickup_time,b.destination_time,b.status, b.booked_at FROM booking b " +
+                "t.amount, t.payment_method, b.pickup_location, b.destination, b.distance,b.pickup_time,b.destination_time,b.status, b.booked_at FROM booking b " +
                 "JOIN account c ON b.customer_id = c.uid JOIN account u ON b.user_id = u.uid JOIN vehicle v " +
                 "ON b.car_id = v.id LEFT JOIN `transaction` t ON b.transaction_id = t.id " +
                 "WHERE v.driver_id = ?";
@@ -105,7 +123,6 @@ public class BookingRepo {
 
         try (Connection con = DatabaseConnection.connection();
              PreparedStatement statement = con.prepareStatement(sql)) {
-            System.err.println("getting bookings by driver id: " + id);
             statement.setString(1, id);
 
             bookings = getBookingsFromStatement(statement);
@@ -121,7 +138,7 @@ public class BookingRepo {
         String sql = "SELECT b.id AS booking_id, c.uid AS customer_id, c.first_name AS customer_first_name, " +
                 "c.last_name AS customer_last_name, u.uid AS user_id, u.first_name AS user_first_name, " +
                 "u.last_name AS user_last_name, v.id AS vehicle_id, v.plate_no, t.id AS transaction_id, " +
-                "t.amount, b.pickup_location, b.destination, b.distance,b.pickup_time,b.destination_time,b.status, b.booked_at FROM booking b " +
+                "t.amount, t.payment_method, b.pickup_location, b.destination, b.distance,b.pickup_time,b.destination_time,b.status, b.booked_at FROM booking b " +
                 "JOIN account c ON b.customer_id = c.uid JOIN account u ON b.user_id = u.uid JOIN vehicle v " +
                 "ON b.car_id = v.id LEFT JOIN `transaction` t ON b.transaction_id = t.id LIMIT ? OFFSET ?;";
         List<Booking> bookings = null;
@@ -145,7 +162,7 @@ public class BookingRepo {
         String sql = "SELECT b.id AS booking_id, c.uid AS customer_id, c.first_name AS customer_first_name, " +
                 "c.last_name AS customer_last_name, u.uid AS user_id, u.first_name AS user_first_name, " +
                 "u.last_name AS user_last_name, v.id AS vehicle_id, v.plate_no, t.id AS transaction_id, " +
-                "t.amount, b.pickup_location, b.destination, b.distance, b.pickup_time,b.destination_time,b.status, b.booked_at FROM booking b " +
+                "t.amount, t.payment_method, b.pickup_location, b.destination, b.distance, b.pickup_time,b.destination_time,b.status, b.booked_at FROM booking b " +
                 "JOIN account c ON b.customer_id = c.uid JOIN account u ON b.user_id = u.uid JOIN vehicle v " +
                 "ON b.car_id = v.id LEFT JOIN `transaction` t ON b.transaction_id = t.id WHERE b.status = ? LIMIT ? OFFSET ?;";
         List<Booking> bookings = null;
@@ -169,7 +186,7 @@ public class BookingRepo {
         String sql = "SELECT b.id AS booking_id, c.uid AS customer_id, c.first_name AS customer_first_name, " +
                 "c.last_name AS customer_last_name, u.uid AS user_id, u.first_name AS user_first_name, " +
                 "u.last_name AS user_last_name, v.id AS vehicle_id, v.plate_no, t.id AS transaction_id, " +
-                "t.amount, b.pickup_location, b.destination, b.distance, b.pickup_time, b.destination_time, " +
+                "t.amount, t.payment_method, b.pickup_location, b.destination, b.distance, b.pickup_time, b.destination_time, " +
                 "b.status, b.booked_at FROM booking b " +
                 "JOIN account c ON b.customer_id = c.uid " +
                 "JOIN account u ON b.user_id = u.uid " +
@@ -198,7 +215,7 @@ public class BookingRepo {
         String sql = "SELECT b.id AS booking_id, c.uid AS customer_id, c.first_name AS customer_first_name, " +
                 "c.last_name AS customer_last_name, u.uid AS user_id, u.first_name AS user_first_name, " +
                 "u.last_name AS user_last_name, v.id AS vehicle_id, v.plate_no, t.id AS transaction_id, " +
-                "t.amount, b.pickup_location, b.destination, b.distance, b.pickup_time, b.destination_time, " +
+                "t.amount, t.payment_method, b.pickup_location, b.destination, b.distance, b.pickup_time, b.destination_time, " +
                 "b.status, b.booked_at FROM booking b " +
                 "JOIN account c ON b.customer_id = c.uid " +
                 "JOIN account u ON b.user_id = u.uid " +
@@ -226,7 +243,7 @@ public class BookingRepo {
         String sql = "SELECT b.id AS booking_id, c.uid AS customer_id, c.first_name AS customer_first_name, " +
                 "c.last_name AS customer_last_name, u.uid AS user_id, u.first_name AS user_first_name, " +
                 "u.last_name AS user_last_name, v.id AS vehicle_id, v.plate_no, t.id AS transaction_id, " +
-                "t.amount, b.pickup_location, b.destination, b.distance, b.pickup_time, b.destination_time, " +
+                "t.amount, t.payment_method, b.pickup_location, b.destination, b.distance, b.pickup_time, b.destination_time, " +
                 "b.status, b.booked_at FROM booking b " +
                 "JOIN account c ON b.customer_id = c.uid " +
                 "JOIN account u ON b.user_id = u.uid " +
@@ -270,7 +287,8 @@ public class BookingRepo {
 
                 Transaction transaction = new Transaction(
                         resultSet.getString("transaction_id"),
-                        resultSet.getFloat("amount")
+                        resultSet.getFloat("amount"),
+                        resultSet.getString("payment_method")
                 );
 
 

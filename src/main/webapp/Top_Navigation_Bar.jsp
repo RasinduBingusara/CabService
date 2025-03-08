@@ -26,7 +26,7 @@
       <li class="profile-menu">
         <a href="#"> <%= loggedUser.getFirstName() %></a>
         <ul class="profile-dropdown">
-          <li><a href="profile?action=view">Profile</a></li>
+          <li><a href="profile?action=c">Profile</a></li>
           <form action="profile" method="post">
             <input type="hidden" name="action" value="logout">
             <input type="submit" value="logout">

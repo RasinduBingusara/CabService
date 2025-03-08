@@ -151,6 +151,7 @@ public class Booking {
                 .append("\"plate_no\":\"").append(escapeJson(vehicle.getPlate_no())).append("\"},") // Fixed key name
                 .append("\"transaction\":{")
                 .append("\"id\":\"").append(escapeJson(transaction.getId())).append("\",")
+                .append("\"payment_method\":\"").append(escapeJson(transaction.getPaymentMethod())).append("\",")
                 .append("\"amount\":\"").append(escapeJson(String.valueOf(transaction.getAmount()))).append("\"},")
                 .append("\"location\":{")
                 .append("\"pickup\":\"").append(escapeJson(pickupLocation)).append("\",")

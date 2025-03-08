@@ -21,7 +21,7 @@
     <div class="booking-container">
         <h2>Add New Booking</h2>
 
-        <form action="customer_bookings" method="post">
+        <form action="customer_bookings?action=add" method="post">
 
             <label style="color: red"><%= request.getAttribute("error")!=null? request.getAttribute("error"):""%> </label>
             <div class="form-group">

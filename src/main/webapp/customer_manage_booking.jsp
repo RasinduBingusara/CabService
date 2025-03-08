@@ -68,12 +68,13 @@
 
                     //for cancel button
                     let form = document.createElement("form");
-                    form.setAttribute("action","edit");
+                    form.setAttribute("action","customer_bookings?action=cancel");
                     form.setAttribute("method","post");
 
                     let hiddenInput = document.createElement("input");
                     hiddenInput.setAttribute("type","hidden");
-                    hiddenInput.setAttribute("name",u.booking_id);
+                    hiddenInput.setAttribute("name","booking_id");
+                    hiddenInput.setAttribute("value",u.booking_id);
                     let button = document.createElement("input")
                     button.setAttribute("type","submit");
                     button.setAttribute("class","cancel-btn");
@@ -81,12 +82,21 @@
 
                     //for pay button
                     let form2 = document.createElement("form");
-                    form2.setAttribute("action","edit");
-                    form2.setAttribute("method","post");
+                    form2.setAttribute("action","payment");
+                    form2.setAttribute("method","get");
 
                     let hiddenInput2 = document.createElement("input");
                     hiddenInput2.setAttribute("type","hidden");
-                    hiddenInput2.setAttribute("name",u.booking_id);
+                    hiddenInput2.setAttribute("name","booking_id");
+                    hiddenInput2.setAttribute("value",u.booking_id);
+                    let hiddenInput22 = document.createElement("input");
+                    hiddenInput22.setAttribute("type","hidden");
+                    hiddenInput22.setAttribute("name","transaction_id");
+                    hiddenInput22.setAttribute("value",u.transaction.id);
+                    let hiddenInput23 = document.createElement("input");
+                    hiddenInput23.setAttribute("type","hidden");
+                    hiddenInput23.setAttribute("name","amount");
+                    hiddenInput23.setAttribute("value",u.transaction.amount);
                     let button2 = document.createElement("input")
                     button2.setAttribute("type","submit");
                     button2.setAttribute("class","edit-btn");
@@ -103,20 +113,18 @@
                             form.appendChild(hiddenInput);
                             form.appendChild(button);
                             action.appendChild(form);
-
-                            form2.appendChild(hiddenInput2);
-                            form2.appendChild(button2);
-                            action.appendChild(form2);
                             break;
-                        case "Paid":
-                            form.setAttribute("action","edit");
-                            button.setAttribute("value","Cancel");
+                        case "Completed":
+                            if(u.transaction.payment_method === "Card"){
+                                form2.appendChild(hiddenInput2);
+                                form2.appendChild(hiddenInput22);
+                                form2.appendChild(hiddenInput23);
+                                form2.appendChild(button2);
+                                action.appendChild(form2);
+                            }
+                            break;
                     }
 
-
-                    form.appendChild(hiddenInput);
-                    form.appendChild(button);
-                    action.appendChild(form);
 
                     vehicle.textContent = u.vehicle.plate_no;
                     pickup.textContent =  u.location.pickup;

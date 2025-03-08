@@ -4,7 +4,7 @@
   <ul class="nav-links">
 
     <form action="profile" method="get">
-      <input type="hidden" name="action" value="view">
+      <input type="hidden" name="action" value="c">
       <input type="submit" value="Profile">
     </form>
 
@@ -14,7 +14,7 @@
     </form>
 
     <form action="customer_bookings" method="get">
-      <input type="hidden" name="action" value="c">
+      <input type="hidden" name="action" value="view">
       <input type="submit" value="Bookings">
     </form>
 

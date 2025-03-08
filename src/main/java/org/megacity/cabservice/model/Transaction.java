@@ -3,7 +3,6 @@ package org.megacity.cabservice.model;
 public class Transaction {
 
     private String id;
-    private String bookingId;
     private double amount;
     private String paymentMethod;
     private String paidAt;
@@ -16,20 +15,14 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public Transaction(String id, String bookingId, double amount, String paymentMethod, String paidAt) {
+    public Transaction(String id, double amount, String paymentMethod) {
         this.id = id;
-        this.bookingId = bookingId;
         this.amount = amount;
         this.paymentMethod = paymentMethod;
-        this.paidAt = paidAt;
     }
 
     public String getId() {
         return id;
-    }
-
-    public String getBookingId() {
-        return bookingId;
     }
 
     public double getAmount() {
@@ -48,9 +41,6 @@ public class Transaction {
         this.id = id;
     }
 
-    public void setBookingId(String bookingId) {
-        this.bookingId = bookingId;
-    }
 
     public void setAmount(double amount) {
         this.amount = amount;
