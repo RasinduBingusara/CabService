@@ -1,8 +1,15 @@
-<%@ page import="java.util.List" %>
-<%@ page import="org.megacity.cabservice.dto.driver_dto.DriverDetailDTO" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%
+  String message = (String) request.getAttribute("message");
+  if (message != null) {
+%>
+<script>
+  alert("<%= message.replace("\"", "\\\"").replace("'", "\\'") %>");
+</script>
+<%
+  }
+%>
 <html>
 <head>
   <title>Title</title>
@@ -157,21 +164,41 @@
           created_at.textContent = u.created_at;
 
           let actionTd = document.createElement("td");
-
           let form = document.createElement("form");
-          form.setAttribute("action", "drivers?action=edit");
+          form.setAttribute("action", "drivers");
 
           let hiddenInput = document.createElement("input");
           hiddenInput.setAttribute("type", "hidden");
-          hiddenInput.setAttribute("name", "driverEmail");
-          hiddenInput.setAttribute("value", u.email);
+          hiddenInput.setAttribute("name", "id");
+          hiddenInput.setAttribute("value", u.id);
+          let hiddenInput2 = document.createElement("input");
+          hiddenInput2.setAttribute("type", "hidden");
+          hiddenInput2.setAttribute("name", "status");
+          let hiddenInput3 = document.createElement("input");
+          hiddenInput3.setAttribute("type", "hidden");
+          hiddenInput3.setAttribute("name", "action");
+          hiddenInput3.setAttribute("value", "update");
 
           let button = document.createElement("button");
           button.classList.add("edit-btn");
           button.setAttribute("type","submit");
-          button.textContent = "Edit";
+          if(u.status === "Active"){
+            hiddenInput2.setAttribute("value", "Banned");
+            button.setAttribute("style","background: #a72828;")
+            button.textContent = "Ban"
+          }
+          else if(u.status === "Banned"){
+            hiddenInput2.setAttribute("value", "Active");
+            button.textContent = "Activate";
+          }
+          else if(u.status === "InActive"){
+            button.setAttribute("style","display: none;")
+          }
+
 
           form.appendChild(hiddenInput);
+          form.appendChild(hiddenInput2);
+          form.appendChild(hiddenInput3);
           form.appendChild(button);
           actionTd.appendChild(form);
 

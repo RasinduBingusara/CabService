@@ -63,4 +63,8 @@ public class DriverAccService {
             }
         }
     }
+
+    public boolean updateStatus(String id, String status) {
+        return accountRepo.updateStatus(id, status);
+    }
 }

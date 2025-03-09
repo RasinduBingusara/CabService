@@ -51,5 +51,9 @@ public class VehicleService {
         return JsonBuilder.getInstance().vehicleDetailDtoToJson(vehicles);
     }
 
+    public boolean updateStatus(String id, String status) {
+        return  vehicleRepo.updateStatus(id, status);
+    }
+
 
 }

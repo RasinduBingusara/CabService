@@ -58,11 +58,22 @@ public class VehicleModelRepo {
         }
         return false;
     }
-    public boolean updateVehicleType(VehicleModel vehicleModel) {
-        return false;
-    }
-    public boolean deleteVehicleType(VehicleModel vehicleModel) {
-        return false;
+    public boolean updateStatus(String id, String status) {
+        String sql = "UPDATE vehicle_model SET status = ?  WHERE model_id = ?";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, status);
+            statement.setString(2, id);
+
+            int rowsInserted = statement.executeUpdate();
+
+            return rowsInserted > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error inserting user: " + e.getMessage(), e);
+        }
     }
     public List<ModelDetailsDto> getAllVehicleModels() {
         String sql = "SELECT * FROM vehicle_model";

@@ -80,6 +80,24 @@ public class VehicleRepo {
         }
     }
 
+    public boolean updateStatus(String id, String status) {
+        String sql = "UPDATE vehicle SET status = ? WHERE id = ?;";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, status);
+            statement.setString(2, id);
+
+            int rowsInserted = statement.executeUpdate();
+
+            return rowsInserted > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error inserting new vehicle: " + e.getMessage(), e);
+        }
+    }
+
     public double getVehiclePricePerKm(String vehicleId) {
         String sql = "SELECT price_per_km FROM vehicle WHERE id = ?";
 

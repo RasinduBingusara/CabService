@@ -201,6 +201,24 @@ public class AccountRepo {
         }
     }
 
+    public boolean updateStatus(String id, String status) {
+        String sql = "UPDATE account SET status= ?  WHERE uid = ? AND user_type = ?;";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, status);
+            statement.setString(2, id);
+            statement.setString(3, "Driver");
+
+            int rowsInserted = statement.executeUpdate();
+            return rowsInserted > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error inserting user: " + e.getMessage(), e);
+        }
+    }
+
     public UserDetailDTO getUserDetails(String email) {
         String sql = "SELECT * FROM account WHERE email = ?";
 

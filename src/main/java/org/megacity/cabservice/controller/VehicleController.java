@@ -108,6 +108,16 @@ public class VehicleController extends HttpServlet {
                 out.flush();
                 out.close();
                 break;
+            case "update":
+                String id = req.getParameter("vehicle_id");
+                if(vehicleService.updateStatus(id, status)) {
+                    req.setAttribute("message", "✅ Vehicle status updated sucessfully");
+                    req.getRequestDispatcher("vehicles?action=view").forward(req, res);
+                }
+                else{
+                    req.setAttribute("message", "❌ Vehicle status update failed");
+                    req.getRequestDispatcher("vehicles?action=view").forward(req, res);
+                }
         }
     }
 }

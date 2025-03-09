@@ -40,21 +40,31 @@ public class VehicleModelController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         String action = req.getParameter("action");
 
-        if(action.equals("view")) {
-            req.getRequestDispatcher("manage_model.jsp").forward(req,res);
-        }
-        else if(action.equals("add")) {
-            req.getRequestDispatcher("add_model.jsp").forward(req,res);
-        }
-        else if(action.equals("load")) {
-            String json = vehicleModelService.getAllVehicleModelsInJason();
+        switch (action) {
+            case "view" -> req.getRequestDispatcher("manage_model.jsp").forward(req, res);
+            case "add" -> req.getRequestDispatcher("add_model.jsp").forward(req, res);
+            case "load" -> {
+                String json = vehicleModelService.getAllVehicleModelsInJason();
 
-            res.setContentType("application/json");
-            res.setCharacterEncoding("UTF-8");
+                res.setContentType("application/json");
+                res.setCharacterEncoding("UTF-8");
 
-            PrintWriter out = res.getWriter();
-            out.print(json);
-            out.flush();
+                PrintWriter out = res.getWriter();
+                out.print(json);
+                out.flush();
+            }
+            case "update" -> {
+                String id = req.getParameter("model_id");
+                String status = req.getParameter("status");
+                if(vehicleModelService.updateStatus(id, status)) {
+                    req.setAttribute("message", "✅ Vehicle model status updated sucessfully");
+                    req.getRequestDispatcher("model?action=view").forward(req, res);
+                }
+                else{
+                    req.setAttribute("message", "❌ Vehicle model status update failed");
+                    req.getRequestDispatcher("model?action=view").forward(req, res);
+                }
+            }
         }
     }
 }

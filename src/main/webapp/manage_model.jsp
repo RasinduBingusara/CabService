@@ -9,12 +9,15 @@
 
 <%
     String message = (String) request.getAttribute("message");
-    if(message!=null){
+    if (message != null) {
 %>
-<script>alert('<%= message%>')</script>
+<script>
+    alert("<%= message.replace("\"", "\\\"").replace("'", "\\'") %>");
+</script>
 <%
     }
 %>
+
 <html>
 <head>
     <title>Title</title>
@@ -50,7 +53,7 @@
     </div>
 
 <script>
-    function fetchUsers() {
+    function fetchModels() {
 
         fetch("model?action=load")
             .then(response => response.json())
@@ -80,19 +83,37 @@
 
                     let actionTd = document.createElement("td");
                     let form = document.createElement("form");
-                    form.setAttribute("action", "model?action=edit");
+                    form.setAttribute("action", "model");
 
                     let hiddenInput = document.createElement("input");
                     hiddenInput.setAttribute("type", "hidden");
-                    hiddenInput.setAttribute("name", "modelId");
+                    hiddenInput.setAttribute("name", "model_id");
                     hiddenInput.setAttribute("value", u.model_id);
+                    let hiddenInput2 = document.createElement("input");
+                    hiddenInput2.setAttribute("type", "hidden");
+                    hiddenInput2.setAttribute("name", "status");
+                    let hiddenInput3 = document.createElement("input");
+                    hiddenInput3.setAttribute("type", "hidden");
+                    hiddenInput3.setAttribute("name", "action");
+                    hiddenInput3.setAttribute("value", "update");
 
                     let button = document.createElement("button");
                     button.classList.add("edit-btn");
                     button.setAttribute("type","submit");
-                    button.textContent = "Edit";
+                    if(u.status === "Active"){
+                        hiddenInput2.setAttribute("value", "Inactive");
+                        button.setAttribute("style","background: #a72828;")
+                        button.textContent = "InActive"
+                    }
+                    else if(u.status === "Inactive"){
+                        hiddenInput2.setAttribute("value", "Active");
+                        button.textContent = "Activate";
+                    }
+
 
                     form.appendChild(hiddenInput);
+                    form.appendChild(hiddenInput2);
+                    form.appendChild(hiddenInput3);
                     form.appendChild(button);
                     actionTd.appendChild(form);
 
@@ -104,15 +125,15 @@
                     newTray.appendChild(transmission);
                     newTray.appendChild(status);
                     newTray.appendChild(addedAt);
-                    newTray.appendChild(button);
+                    newTray.appendChild(actionTd);
                     container.appendChild(newTray);
                 })
 
             })
-            .catch(error => console.error("Error fetching users:", error));
+            .catch(error => console.error("Error fetching models:", error));
     }
 
-    window.onload = fetchUsers;
+    window.onload = fetchModels;
 </script>
 </body>
 </html>

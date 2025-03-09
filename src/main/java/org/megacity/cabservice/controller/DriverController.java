@@ -94,6 +94,17 @@ public class DriverController extends HttpServlet {
                 out.print(driverJson);
                 out.flush();
             }
+            case "update" -> {
+                String driverId = req.getParameter("id");
+                if(driverAccService.updateStatus(driverId, status)) {
+                    req.setAttribute("message", "✅ Driver status updated Successfully");
+                    req.getRequestDispatcher("drivers?action=view").forward(req, resp);
+                }
+                else{
+                    req.setAttribute("message", "❌ Driver status update Failed");
+                    req.getRequestDispatcher("drivers?action=view").forward(req, resp);
+                }
+            }
         }
     }
 }

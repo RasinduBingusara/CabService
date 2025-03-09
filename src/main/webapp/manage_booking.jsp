@@ -17,10 +17,6 @@
     <div class="content">
         <h1>Manage Bookings</h1>
 
-        <a href="bookings?action=add">
-            <button class="add-btn">+ Add Booking</button>
-        </a>
-
         <input type="text" id="searchBookings" placeholder="Search by plate no or transaction id ..." onkeyup="searchTable()" class="searchBar">
         <select id="statusFilter" name="statusFilter" onchange="onChangeStatus()">
             <option value="">All</option>
@@ -40,7 +36,6 @@
                 <th>Destination</th>
                 <th>Distance</th>
                 <th>Booked At</th>
-                <th>Action</th>
             </tr>
             </thead>
             <tbody id="bookingContainer">
@@ -150,24 +145,6 @@
             let bookedAt = document.createElement("td");
             bookedAt.textContent = u.booked_at;
 
-            let actionTd = document.createElement("td");
-            let form = document.createElement("form");
-            form.setAttribute("action", "booking?action=edit");
-
-            let hiddenInput = document.createElement("input");
-            hiddenInput.setAttribute("type", "hidden");
-            hiddenInput.setAttribute("name", "bookingId");
-            hiddenInput.setAttribute("value", u.booking_id);
-
-            let button = document.createElement("button");
-            button.classList.add("edit-btn");
-            button.setAttribute("type","submit");
-            button.textContent = "Edit";
-
-            form.appendChild(hiddenInput);
-            form.appendChild(button);
-            actionTd.appendChild(form);
-
             newTray.appendChild(customer);
             newTray.appendChild(bookingUser);
             newTray.appendChild(vehicle);
@@ -176,7 +153,6 @@
             newTray.appendChild(destination);
             newTray.appendChild(distance);
             newTray.appendChild(bookedAt);
-            newTray.appendChild(actionTd);
 
             container.appendChild(newTray);
         })

@@ -27,12 +27,7 @@ public class VehicleModelService {
         }
 
     }
-    public boolean removeVehicleModel(VehicleModel vehicleModel) {
-        return false;
-    }
-    public boolean updateVehicleModel(VehicleModel vehicleModel) {
-        return false;
-    }
+
     public List<ModelDetailsDto> getAllVehicleModels() {
         return vehicleModelRepo.getAllVehicleModels();
     }
@@ -40,6 +35,10 @@ public class VehicleModelService {
     public String getAllVehicleModelsInJason() {
         List<ModelDetailsDto> allVehicleModels = vehicleModelRepo.getAllVehicleModels();
         return JsonBuilder.getInstance().modelDetailDtoToJson(allVehicleModels);
+    }
+
+    public boolean updateStatus(String id, String status) {
+        return vehicleModelRepo.updateStatus(id, status);
     }
     public VehicleModel getVehicleModelById(int id) {
         return null;

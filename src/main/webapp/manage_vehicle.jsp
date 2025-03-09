@@ -6,7 +6,16 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%
+    String message = (String) request.getAttribute("message");
+    if (message != null) {
+%>
+<script>
+    alert("<%= message.replace("\"", "\\\"").replace("'", "\\'") %>");
+</script>
+<%
+    }
+%>
 <html>
 <head>
     <title>Title</title>
@@ -168,21 +177,41 @@
             addedAt.textContent = u.added_at;
 
             let actionTd = document.createElement("td");
-
             let form = document.createElement("form");
-            form.setAttribute("action", "drivers?action=edit");
+            form.setAttribute("action", "vehicles");
 
             let hiddenInput = document.createElement("input");
             hiddenInput.setAttribute("type", "hidden");
-            hiddenInput.setAttribute("name", "driverEmail");
-            hiddenInput.setAttribute("value", u.email);
+            hiddenInput.setAttribute("name", "vehicle_id");
+            hiddenInput.setAttribute("value", u.vehicle_id);
+            let hiddenInput2 = document.createElement("input");
+            hiddenInput2.setAttribute("type", "hidden");
+            hiddenInput2.setAttribute("name", "status");
+            let hiddenInput3 = document.createElement("input");
+            hiddenInput3.setAttribute("type", "hidden");
+            hiddenInput3.setAttribute("name", "action");
+            hiddenInput3.setAttribute("value", "update");
 
             let button = document.createElement("button");
             button.classList.add("edit-btn");
             button.setAttribute("type","submit");
-            button.textContent = "Edit";
+            if(u.status === "Active"){
+                hiddenInput2.setAttribute("value", "Inactive");
+                button.setAttribute("style","background: #a72828;")
+                button.textContent = "InActive"
+            }
+            else if(u.status === "Inactive"){
+                hiddenInput2.setAttribute("value", "Active");
+                button.textContent = "Activate";
+            }
+            else if(u.status === "OnTrip"){
+                button.setAttribute("style","display: none;")
+            }
+
 
             form.appendChild(hiddenInput);
+            form.appendChild(hiddenInput2);
+            form.appendChild(hiddenInput3);
             form.appendChild(button);
             actionTd.appendChild(form);
 
