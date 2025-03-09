@@ -19,11 +19,6 @@ public class BookingController extends HttpServlet {
 
     private BookingService bookingService = new BookingService();
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
-
-    }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
@@ -40,15 +35,8 @@ public class BookingController extends HttpServlet {
             case "view":
                 req.getRequestDispatcher("manage_booking.jsp").forward(req,res);
                 break;
-            case "add":
-//                req.setAttribute("vehicleModels", vehicleModelService.getAllVehicleModels());
-//                req.setAttribute("drivers", driverAccService.getAllEmployeeDrivers());
-//                req.getRequestDispatcher("add_vehicle.jsp").forward(req,res);
-                break;
             case "portion":
-                System.out.println("Portion");
                 json = bookingService.getPortionOfBookingsInJson(limit,offset,status);
-                System.out.println(json);
                 res.setContentType("application/json");
                 res.setCharacterEncoding("UTF-8");
 
@@ -57,9 +45,7 @@ public class BookingController extends HttpServlet {
                 out.close();
                 break;
             case "search":
-                System.out.println("Searching");
                 json = bookingService.getBookingBySearchInJson(keyword,status);
-                System.out.println(json);
                 res.setContentType("application/json");
                 res.setCharacterEncoding("UTF-8");
 
@@ -72,11 +58,7 @@ public class BookingController extends HttpServlet {
                 double discount = req.getParameter("discount")!=null ? Double.parseDouble(req.getParameter("discount")):-1;
                 String vehicleId = req.getParameter("vehicle_id");
 
-                System.out.println("Calculating");
-                System.out.println("vehicle id: " + vehicleId);
-                System.out.println("distance: " + distance);
                 json = bookingService.getPriceOfBookingInJson(distance,vehicleId,discount);
-                System.out.println(json);
                 res.setContentType("application/json");
                 res.setCharacterEncoding("UTF-8");
 

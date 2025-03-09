@@ -8,23 +8,20 @@ import org.megacity.cabservice.model.Users.Customer;
 import org.megacity.cabservice.model.Users.Driver;
 
 import java.awt.print.Book;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BookingRepo {
 
-    public boolean addNewBooking(BookingInsertDto booking) {
+    public int addNewBooking(BookingInsertDto booking) {
         String sql = "INSERT INTO booking" +
                 "(customer_id, user_id, car_id,transaction_id, pickup_location, destination, " +
                 "distance, pickup_time, status, booked_at) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, now(), ?,  now())";
 
         try (Connection con = DatabaseConnection.connection();
-             PreparedStatement statement = con.prepareStatement(sql)) {
+             PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, booking.getCustomerId());
             statement.setString(2, booking.getUserId());
@@ -37,7 +34,15 @@ public class BookingRepo {
 
             int rowsInserted = statement.executeUpdate();
 
-            return rowsInserted > 0;
+            if (rowsInserted > 0) {
+                try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        return generatedKeys.getInt(1);
+                    }
+                }
+            }
+
+            return -1;
 
         } catch (SQLException e) {
             throw new RuntimeException("Error inserting new booking: " + e.getMessage(), e);
@@ -60,6 +65,80 @@ public class BookingRepo {
         } catch (SQLException e) {
             throw new RuntimeException("Error updating new booking: " + e.getMessage(), e);
         }
+    }
+
+    public Customer getCustomerByBooking(String bookingId) {
+        String sql = "SELECT a.uid, a.first_name, a.last_name, a.email, a.contact_number, a.nic, " +
+                "a.driver_license, a.address, a.user_type, a.status, a.employment_type, a.updated_at, a.created_at " +
+                "FROM account a JOIN booking b ON a.uid = b.user_id " +
+                "WHERE b.id = ?;";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, bookingId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    Customer customer = new Customer();
+                    customer.setId(resultSet.getString("uid"));
+                    customer.setFirstName(resultSet.getString("first_name"));
+                    customer.setLastName(resultSet.getString("last_name"));
+                    customer.setEmail(resultSet.getString("email"));
+                    customer.setContactNumber(resultSet.getString("contact_number"));
+                    customer.setNic(resultSet.getString("nic"));
+                    customer.setDriverLicense(resultSet.getString("driver_license"));
+                    customer.setAddress(resultSet.getString("address"));
+                    customer.setUserType(resultSet.getString("user_type"));
+                    customer.setStatus(resultSet.getString("status"));
+                    customer.setEmploymentType(resultSet.getString("employment_type"));
+                    customer.setUpdatedAt(resultSet.getString("updated_at"));
+                    customer.setCreatedAt(resultSet.getString("created_at"));
+                    return customer;
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting customer by booking id: " + e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public Driver getDriverByBooking(String bookingId) {
+        String sql = "SELECT a.uid, a.first_name, a.last_name, a.email, a.contact_number, a.nic, " +
+                "a.driver_license, a.address, a.user_type, a.status, a.employment_type, a.updated_at, a.created_at " +
+                "FROM account a JOIN vehicle v ON a.uid = v.driver_id JOIN booking b ON v.id = b.car_id " +
+                "WHERE b.id = ?;";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, bookingId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    Driver driver = new Driver();
+                    driver.setId(resultSet.getString("uid"));
+                    driver.setFirstName(resultSet.getString("first_name"));
+                    driver.setLastName(resultSet.getString("last_name"));
+                    driver.setEmail(resultSet.getString("email"));
+                    driver.setContactNumber(resultSet.getString("contact_number"));
+                    driver.setNic(resultSet.getString("nic"));
+                    driver.setDriverLicense(resultSet.getString("driver_license"));
+                    driver.setAddress(resultSet.getString("address"));
+                    driver.setUserType(resultSet.getString("user_type"));
+                    driver.setStatus(resultSet.getString("status"));
+                    driver.setEmploymentType(resultSet.getString("employment_type"));
+                    driver.setUpdatedAt(resultSet.getString("updated_at"));
+                    driver.setCreatedAt(resultSet.getString("created_at"));
+                    return driver;
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting customer by booking id: " + e.getMessage(), e);
+        }
+        return null;
     }
 
     public List<Booking> getBookingsByCustomerId(String customerId, String status) {

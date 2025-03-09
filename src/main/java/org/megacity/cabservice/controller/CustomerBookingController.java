@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.megacity.cabservice.dto.booking_dto.BookingInsertDto;
+import org.megacity.cabservice.model.Notifiers.BookingNotifier;
 import org.megacity.cabservice.model.Transaction;
 import org.megacity.cabservice.model.User;
 import org.megacity.cabservice.model.Wrappers.ResponseWrapper;
@@ -17,6 +18,7 @@ import java.io.PrintWriter;
 public class CustomerBookingController extends HttpServlet {
 
     private BookingService bookingService = new BookingService();
+    private BookingNotifier bookingNotifier = new BookingNotifier();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -52,10 +54,16 @@ public class CustomerBookingController extends HttpServlet {
                 break;
             case "cancel":
                 bookingService.setBookingStatusByBookingId(bookingId,"Cancelled");
+                bookingNotifier.registerListener(bookingService.getDriverByBookingId(bookingId));
+                bookingNotifier.setMessage("User Canceled the booking");
+                bookingNotifier.removeAllListeners();
                 request.getRequestDispatcher("customer_manage_booking.jsp").forward(request, response);
                 break;
             case "paid":
                 bookingService.setBookingStatusByBookingId(bookingId,"Paid");
+                bookingNotifier.registerListener(bookingService.getDriverByBookingId(bookingId));
+                bookingNotifier.setMessage("Customer Paid the booking");
+                bookingNotifier.removeAllListeners();
                 request.getRequestDispatcher("customer_manage_booking.jsp").forward(request, response);
                 break;
         }
@@ -78,9 +86,7 @@ public class CustomerBookingController extends HttpServlet {
             case "add":
                 request.getRequestDispatcher("customer_add_booking.jsp").forward(request, response);
             case "history":
-                System.out.println("History");
                 json = bookingService.getBookingsByCustomerId(id);
-                System.out.println(json);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
 

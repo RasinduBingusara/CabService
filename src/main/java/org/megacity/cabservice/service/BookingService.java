@@ -3,11 +3,15 @@ package org.megacity.cabservice.service;
 import org.megacity.cabservice.dto.booking_dto.BookingInsertDto;
 import org.megacity.cabservice.dto.vehicle_dto.VehicleDetailsDto;
 import org.megacity.cabservice.model.Booking;
+import org.megacity.cabservice.model.Notifiers.BookingNotifier;
+import org.megacity.cabservice.model.Notifiers.UserNotificationListner;
 import org.megacity.cabservice.model.Pricing.DiscountPrice;
 import org.megacity.cabservice.model.Pricing.FareCalculator;
 import org.megacity.cabservice.model.Pricing.PricingCalc;
 import org.megacity.cabservice.model.Pricing.RegularPrice;
 import org.megacity.cabservice.model.Transaction;
+import org.megacity.cabservice.model.Users.Customer;
+import org.megacity.cabservice.model.Users.Driver;
 import org.megacity.cabservice.model.Wrappers.BooleanWrapper;
 import org.megacity.cabservice.model.Wrappers.ResponseWrapper;
 import org.megacity.cabservice.repository.*;
@@ -59,7 +63,20 @@ public class BookingService {
             transaction.setAmount(calculateFare(booking.getDistance(),booking.getVehicleId(),-1));
             int transactionId = transactionRepo.addTransaction(transaction);
             booking.setTransactionId(String.valueOf(transactionId));
-            if(bookingRepo.addNewBooking(booking)){
+            int bookingId = bookingRepo.addNewBooking(booking);
+            if(bookingId > 0){
+
+                Customer customer = getCustomerByBookingId(String.valueOf(bookingId));
+                Driver driver = getDriverByBookingId(String.valueOf(bookingId));
+
+                BookingNotifier notifier = new BookingNotifier();
+                notifier.registerListener(customer);
+                notifier.setMessage("Booking successfully added");
+                notifier.removeListener(customer);
+
+                notifier.registerListener(driver);
+                notifier.setMessage("Your ride has been booked!");
+
 
                 return new ResponseWrapper<>("Booking added successfully", null);
             }
@@ -69,6 +86,14 @@ public class BookingService {
         }
         else
             return new ResponseWrapper<>("Vehicle already in a trip", booking);
+    }
+
+    public Customer getCustomerByBookingId(String bookingId){
+        return bookingRepo.getCustomerByBooking(bookingId);
+    }
+
+    public Driver getDriverByBookingId(String bookingId){
+        return bookingRepo.getDriverByBooking(bookingId);
     }
 
     public String getBookingsByCustomerId(String customerId){

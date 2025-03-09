@@ -86,7 +86,7 @@
                     form2.setAttribute("method","post");
 
                     let form3 = document.createElement("form");
-                    form3.setAttribute("action","payment?method=Cash");
+                    form3.setAttribute("action","payment?method=Cash&type=driver");
                     form3.setAttribute("method","post");
 
                     let form4 = document.createElement("form");

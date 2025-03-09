@@ -40,11 +40,14 @@ public class PaymentController extends HttpServlet {
             case "Cash":
                 paymentMethod = new CashPayment();
         }
-        System.out.println("Before Payment");
         if(paymentMethod.pay(amount)){
-            System.out.println("After Payment");
             if(transactionService.updateTransaction(transactionId)) {
-                request.getRequestDispatcher("customer_bookings?action=paid").forward(request, response);
+                if(request.getParameter("type").equals("driver") ) {
+                    request.getRequestDispatcher("driver_bookings?action=paid").forward(request, response);
+                }
+                else{
+                    request.getRequestDispatcher("customer_bookings?action=paid").forward(request, response);
+                }
             }
         }
 

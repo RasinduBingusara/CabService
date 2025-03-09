@@ -1,4 +1,4 @@
-package org.megacity.cabservice.model.Users;
+package org.megacity.cabservice.model.Notifiers;
 
 public interface UserNotificationListner {
 
