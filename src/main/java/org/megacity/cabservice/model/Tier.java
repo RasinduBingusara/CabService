@@ -2,7 +2,7 @@ package org.megacity.cabservice.model;
 
 public class Tier {
 
-    private String id;
+    private int id;
     private String name;
     private int percentage;
     private String updatedAt;
@@ -10,17 +10,17 @@ public class Tier {
     public Tier() {
     }
 
-    public Tier(String id, String name, int percentage) {
+    public Tier(int id, String name, int percentage) {
         this.id = id;
         this.name = name;
         this.percentage = percentage;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

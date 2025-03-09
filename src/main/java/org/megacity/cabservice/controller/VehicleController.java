@@ -61,8 +61,8 @@ public class VehicleController extends HttpServlet {
 
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         String action = req.getParameter("action");
-        String limit= req.getParameter("limit");
-        String offset= req.getParameter("offset");
+        int limit = req.getParameter("limit")!=null? Integer.parseInt(req.getParameter("limit")):-1;
+        int offset = req.getParameter("offset")!=null? Integer.parseInt(req.getParameter("offset")):-1;
         String status= req.getParameter("status");
         String keyword = req.getParameter("keyword");
 
@@ -109,7 +109,7 @@ public class VehicleController extends HttpServlet {
                 out.close();
                 break;
             case "update":
-                String id = req.getParameter("vehicle_id");
+                int id = Integer.parseInt(req.getParameter("vehicle_id"));
                 if(vehicleService.updateStatus(id, status)) {
                     req.setAttribute("message", "✅ Vehicle status updated sucessfully");
                     req.getRequestDispatcher("vehicles?action=view").forward(req, res);

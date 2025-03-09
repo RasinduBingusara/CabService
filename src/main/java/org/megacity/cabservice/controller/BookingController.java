@@ -25,8 +25,8 @@ public class BookingController extends HttpServlet {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
         String action = req.getParameter("action");
-        String limit= req.getParameter("limit");
-        String offset= req.getParameter("offset");
+        int limit = req.getParameter("limit")!=null? Integer.parseInt(req.getParameter("limit")):-1;
+        int offset = req.getParameter("offset")!=null? Integer.parseInt(req.getParameter("offset")):-1;
         String status= req.getParameter("status");
         String keyword = req.getParameter("keyword");
 
@@ -57,7 +57,7 @@ public class BookingController extends HttpServlet {
                 break;
             case "calculate":
                 double distance = Double.parseDouble(req.getParameter("distance"));
-                String vehicleId = req.getParameter("vehicle_id");
+                int vehicleId = Integer.parseInt(req.getParameter("vehicle_id"));
 
                 json = bookingService.getPriceOfBookingInJson(user.getId(),distance,vehicleId);
                 res.setContentType("application/json");

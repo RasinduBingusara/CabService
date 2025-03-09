@@ -26,7 +26,7 @@ public class BookingService {
     private TaxRepo taxRepo = new TaxRepo();
     private TransactionRepo transactionRepo = new TransactionRepo();
 
-    public String getPortionOfBookingsInJson(String limit,String offset, String status){
+    public String getPortionOfBookingsInJson(int limit,int offset, String status){
         List<Booking> bookings = status.isEmpty()? bookingRepo.getPortionOfBookings(limit, offset):
                 bookingRepo.getPortionOfBookingsWithStatus(limit, offset,status);
 
@@ -46,27 +46,27 @@ public class BookingService {
 
     }
 
-    public boolean setBookingStatusByBookingId(String id,String status){
+    public boolean setBookingStatusByBookingId(int id,String status){
         return bookingRepo.setBookingStatusByBookingId(id,status);
     }
-    public boolean payBookingByBookingId(String bookingId, String transactionId){
+    public boolean payBookingByBookingId(int bookingId, int transactionId){
         if(transactionRepo.updatePaidTime(transactionId)){
             return bookingRepo.setBookingStatusByBookingId(bookingId,"Paid");
         }
         return false;
     }
 
-    public ResponseWrapper<BookingInsertDto> addNewBooking(String customerId,BookingInsertDto booking, Transaction transaction){
+    public ResponseWrapper<BookingInsertDto> addNewBooking(int customerId,BookingInsertDto booking, Transaction transaction){
         if(vehicleRepo.checkVehicleAvailabilityByStatus(booking.getVehicleId(),"Active")){
 
             transaction.setAmount(calculateFare(customerId,booking.getDistance(),booking.getVehicleId()));
             int transactionId = transactionRepo.addTransaction(transaction);
-            booking.setTransactionId(String.valueOf(transactionId));
+            booking.setTransactionId(transactionId);
             int bookingId = bookingRepo.addNewBooking(booking);
             if(bookingId > 0){
 
-                Customer customer = getCustomerByBookingId(String.valueOf(bookingId));
-                Driver driver = getDriverByBookingId(String.valueOf(bookingId));
+                Customer customer = getCustomerByBookingId(bookingId);
+                Driver driver = getDriverByBookingId(bookingId);
 
                 BookingNotifier notifier = new BookingNotifier();
                 notifier.registerListener(driver);
@@ -91,31 +91,31 @@ public class BookingService {
             return new ResponseWrapper<>("Vehicle already in a trip", booking);
     }
 
-    public Customer getCustomerByBookingId(String bookingId){
+    public Customer getCustomerByBookingId(int bookingId){
         return bookingRepo.getCustomerByBooking(bookingId);
     }
 
-    public Driver getDriverByBookingId(String bookingId){
+    public Driver getDriverByBookingId(int bookingId){
         return bookingRepo.getDriverByBooking(bookingId);
     }
 
-    public String getBookingsByCustomerId(String customerId){
+    public String getBookingsByCustomerId(int customerId){
         List<Booking> bookings = bookingRepo.getBookingsByCustomerId(customerId);
         return JsonBuilder.getInstance().bookingsToJson(bookings);
 
     }
 
-    public String getBookingsByDriverId(String driverId){
+    public String getBookingsByDriverId(int driverId){
         List<Booking> bookings = bookingRepo.getBookingsByDriverId(driverId);
         return JsonBuilder.getInstance().bookingsToJson(bookings);
     }
 
-    public String getBookingsByCustomerIdAndStatus(String customerId, String status){
+    public String getBookingsByCustomerIdAndStatus(int customerId, String status){
         List<Booking> bookings = bookingRepo.getBookingsByCustomerId(customerId,status);
         return JsonBuilder.getInstance().bookingsToJson(bookings);
     }
 
-    public String getPriceOfBookingInJson(String customerId,double distance, String vehicleId){
+    public String getPriceOfBookingInJson(int customerId,double distance, int vehicleId){
         PricingCalc pricingCalc;
         double price_per_km = vehicleRepo.getVehiclePricePerKm(vehicleId);
         double tax = taxRepo.getTaxByKeyName("Service Tax");
@@ -143,7 +143,7 @@ public class BookingService {
 
     }
 
-    private double calculateFare(String customerId, double distance, String vehicleId){
+    private double calculateFare(int customerId, double distance, int vehicleId){
         PricingCalc pricingCalc;
         double price_per_km = vehicleRepo.getVehiclePricePerKm(vehicleId);
         double tax = taxRepo.getTaxByKeyName("Service Tax");

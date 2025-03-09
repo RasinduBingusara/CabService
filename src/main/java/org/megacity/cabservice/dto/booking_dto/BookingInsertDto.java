@@ -6,17 +6,17 @@ import org.megacity.cabservice.model.Vehicle;
 
 public class BookingInsertDto {
 
-    private String customerId;
-    private String userId;
-    private String vehicleId;
+    private int customerId;
+    private int userId;
+    private int vehicleId;
     private String pickupLocation;
     private String destination;
     private String pickupTime;
     private double distance;
     private String status;
-    private String transactionId;
+    private int transactionId;
 
-    public BookingInsertDto(String customerId, String userId, String vehicleId, String pickupLocation, String destination, String pickupTime, double distance, String status) {
+    public BookingInsertDto(int customerId, int userId, int vehicleId, String pickupLocation, String destination, String pickupTime, double distance, String status) {
         this.customerId = customerId;
         this.userId = userId;
         this.vehicleId = vehicleId;
@@ -27,15 +27,15 @@ public class BookingInsertDto {
         this.status = status;
     }
 
-    public String getCustomerId() {
+    public int getCustomerId() {
         return customerId;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public String getVehicleId() {
+    public int getVehicleId() {
         return vehicleId;
     }
 
@@ -59,11 +59,11 @@ public class BookingInsertDto {
         return status;
     }
 
-    public String getTransactionId() {
+    public int getTransactionId() {
         return transactionId;
     }
 
-    public void setTransactionId(String transactionId) {
+    public void setTransactionId(int transactionId) {
         this.transactionId = transactionId;
     }
 }

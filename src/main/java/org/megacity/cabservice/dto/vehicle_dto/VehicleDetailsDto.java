@@ -5,7 +5,7 @@ import org.megacity.cabservice.model.VehicleModel;
 
 public class VehicleDetailsDto {
 
-    private String id;
+    private int id;
     private VehicleModel model;
     private String color;
     private String plate_no;
@@ -20,7 +20,7 @@ public class VehicleDetailsDto {
     private String added_At;
 
 
-    public VehicleDetailsDto(String id, VehicleModel model, String color, String plate_no, int seat_count, boolean availability, float price_per_km, float liters_per_km, User driver, User owner, String status, String updatedAt, String added_At) {
+    public VehicleDetailsDto(int id, VehicleModel model, String color, String plate_no, int seat_count, boolean availability, float price_per_km, float liters_per_km, User driver, User owner, String status, String updatedAt, String added_At) {
         this.id = id;
         this.model = model;
         this.color = color;
@@ -36,7 +36,7 @@ public class VehicleDetailsDto {
         this.added_At = added_At;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -93,9 +93,9 @@ public class VehicleDetailsDto {
         StringBuilder json = new StringBuilder();
 
         json.append("{")
-                .append("\"vehicle_id\":\"").append(escapeJson(id)).append("\",")
+                .append("\"vehicle_id\":\"").append(escapeJson(String.valueOf(id))).append("\",")
                 .append("\"model\":{")
-                .append("\"model_id\":\"").append(escapeJson(model.getModelId())).append("\",")
+                .append("\"model_id\":\"").append(escapeJson(String.valueOf(model.getModelId()))).append("\",")
                 .append("\"model_name\":\"").append(escapeJson(model.getModelName())).append("\"},")
                 .append("\"color\":\"").append(escapeJson(color)).append("\",")
                 .append("\"plate_no\":\"").append(escapeJson(plate_no)).append("\",")
@@ -104,11 +104,11 @@ public class VehicleDetailsDto {
                 .append("\"price_per_km\":\"").append(escapeJson(String.valueOf(price_per_km))).append("\",")
                 .append("\"liters_per_km\":\"").append(escapeJson(String.valueOf(liters_per_km))).append("\",")
                 .append("\"driver\":{")
-                .append("\"driver_id\":\"").append(escapeJson(driver.getId())).append("\",")
+                .append("\"driver_id\":\"").append(escapeJson(String.valueOf(driver.getId()))).append("\",")
                 .append("\"first_name\":\"").append(escapeJson(driver.getFirstName())).append("\",")
                 .append("\"last_name\":\"").append(escapeJson(driver.getLastName())).append("\"},")
                 .append("\"owner\":{")
-                .append("\"owner_id\":\"").append(escapeJson(owner.getId())).append("\",")
+                .append("\"owner_id\":\"").append(escapeJson(String.valueOf(owner.getId()))).append("\",")
                 .append("\"first_name\":\"").append(escapeJson(owner.getFirstName())).append("\",")
                 .append("\"last_name\":\"").append(escapeJson(owner.getLastName())).append("\"},")
                 .append("\"status\":\"").append(escapeJson(status)).append("\",")

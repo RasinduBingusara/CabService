@@ -31,13 +31,13 @@ public class VehicleRepo {
         return false;
     }
 
-    public boolean checkVehicleAvailabilityByStatus(String id, String status) {
+    public boolean checkVehicleAvailabilityByStatus(int id, String status) {
         String sql = "SELECT * FROM vehicle WHERE id = ? AND status = ?";
         try (Connection con = DatabaseConnection.connection();
              PreparedStatement statement = con.prepareStatement(sql)) {
 
             System.err.println("id: " + id);
-            statement.setString(1, id);
+            statement.setInt(1, id);
             statement.setString(2, status);
 
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -80,14 +80,14 @@ public class VehicleRepo {
         }
     }
 
-    public boolean updateStatus(String id, String status) {
+    public boolean updateStatus(int id, String status) {
         String sql = "UPDATE vehicle SET status = ? WHERE id = ?;";
 
         try (Connection con = DatabaseConnection.connection();
              PreparedStatement statement = con.prepareStatement(sql)) {
 
             statement.setString(1, status);
-            statement.setString(2, id);
+            statement.setInt(2, id);
 
             int rowsInserted = statement.executeUpdate();
 
@@ -98,13 +98,13 @@ public class VehicleRepo {
         }
     }
 
-    public double getVehiclePricePerKm(String vehicleId) {
+    public double getVehiclePricePerKm(int vehicleId) {
         String sql = "SELECT price_per_km FROM vehicle WHERE id = ?";
 
         try (Connection con = DatabaseConnection.connection();
              PreparedStatement statement = con.prepareStatement(sql)) {
 
-            statement.setString(1, vehicleId);
+            statement.setInt(1, vehicleId);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -159,7 +159,7 @@ public class VehicleRepo {
         return vehicles;
     }
 
-    public List<VehicleDetailsDto> getPortionOfVehicles(String limit, String offset) {
+    public List<VehicleDetailsDto> getPortionOfVehicles(int limit, int offset) {
         String sql = "SELECT v.id, v.model AS model_id, vm.model_name, v.color, v.plate_no, v.seat_count, " +
                 "v.availability, v.price_per_km, v.liter_per_km, v.driver_id, d.first_name AS driver_first_name, " +
                 "d.last_name AS driver_last_name, v.owner_id, o.first_name AS owner_first_name, " +
@@ -171,8 +171,8 @@ public class VehicleRepo {
         try (Connection con = DatabaseConnection.connection();
              PreparedStatement statement = con.prepareStatement(sql)) {
 
-            statement.setInt(1, Integer.parseInt(limit));
-            statement.setInt(2, Integer.parseInt(offset));
+            statement.setInt(1, limit);
+            statement.setInt(2, offset);
 
             vehicles = getVehicleDetailsDto(statement);
 
@@ -184,7 +184,7 @@ public class VehicleRepo {
         return vehicles;
     }
 
-    public List<VehicleDetailsDto> getPortionOfVehiclesWithStatus(String limit, String offset,String status) {
+    public List<VehicleDetailsDto> getPortionOfVehiclesWithStatus(int limit, int offset,String status) {
         String sql = "SELECT v.id, v.model AS model_id, vm.model_name, v.color, v.plate_no, v.seat_count, " +
                 "v.availability, v.price_per_km, v.liter_per_km, v.driver_id, d.first_name AS driver_first_name, " +
                 "d.last_name AS driver_last_name, v.owner_id, o.first_name AS owner_first_name, " +
@@ -197,8 +197,8 @@ public class VehicleRepo {
              PreparedStatement statement = con.prepareStatement(sql)) {
 
             statement.setString(1, status);
-            statement.setInt(2, Integer.parseInt(limit));
-            statement.setInt(3, Integer.parseInt(offset));
+            statement.setInt(2, limit);
+            statement.setInt(3, offset);
             System.out.println("Database vehicle: " + status);
 
             vehicles = getVehicleDetailsDto(statement);
@@ -263,16 +263,16 @@ public class VehicleRepo {
         try (ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 VehicleDetailsDto dto = new VehicleDetailsDto(
-                        resultSet.getString("id"),
-                        new VehicleModel(resultSet.getString("model_id"),resultSet.getString("model_name")),
+                        resultSet.getInt("id"),
+                        new VehicleModel(resultSet.getInt("model_id"),resultSet.getString("model_name")),
                         resultSet.getString("color"),
                         resultSet.getString("plate_no"),
                         resultSet.getInt("seat_count"),
                         resultSet.getInt("availability") == 1,
                         resultSet.getFloat("price_per_km"),
                         resultSet.getFloat("liter_per_km"),
-                        new User(resultSet.getString("driver_id"),resultSet.getString("driver_first_name"), resultSet.getString("driver_last_name")),
-                        new User(resultSet.getString("owner_id"),resultSet.getString("owner_first_name"), resultSet.getString("owner_last_name")),
+                        new User(resultSet.getInt("driver_id"),resultSet.getString("driver_first_name"), resultSet.getString("driver_last_name")),
+                        new User(resultSet.getInt("owner_id"),resultSet.getString("owner_first_name"), resultSet.getString("owner_last_name")),
                         resultSet.getString("status"),
                         resultSet.getString("updated_at"),
                         resultSet.getString("added_at")

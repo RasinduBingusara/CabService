@@ -30,19 +30,19 @@ public class TierRepo {
         return -1;
     }
 
-    public Tier getTierNameByCustomerId(String customerId) {
+    public Tier getTierNameByCustomerId(int customerId) {
         String sql = "SELECT t.id, t.tier_name, t.percentage, t.updated_at FROM tier t JOIN account a ON t.id = a.tier_id " +
                 "WHERE a.uid = ?;";
 
         try (Connection con = DatabaseConnection.connection();
              PreparedStatement statement = con.prepareStatement(sql)) {
 
-            statement.setString(1, customerId);
+            statement.setInt(1, customerId);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return new Tier(
-                            resultSet.getString("id"),
+                            resultSet.getInt("id"),
                             resultSet.getString("tier_name"),
                             resultSet.getInt("percentage")
                     );

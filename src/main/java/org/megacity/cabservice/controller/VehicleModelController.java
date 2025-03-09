@@ -54,7 +54,7 @@ public class VehicleModelController extends HttpServlet {
                 out.flush();
             }
             case "update" -> {
-                String id = req.getParameter("model_id");
+                int id = Integer.parseInt(req.getParameter("model_id"));
                 String status = req.getParameter("status");
                 if(vehicleModelService.updateStatus(id, status)) {
                     req.setAttribute("message", "✅ Vehicle model status updated sucessfully");

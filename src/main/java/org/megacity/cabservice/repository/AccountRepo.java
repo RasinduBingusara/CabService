@@ -83,7 +83,7 @@ public class AccountRepo {
                         case "Customer":
 
                             UserResponseDTO responseDTO = new UserResponseDTO(
-                                    resultSet.getString("uid"),
+                                    resultSet.getInt("uid"),
                                     resultSet.getString("first_name"),
                                     resultSet.getString("last_name"),
                                     resultSet.getString("email"),
@@ -96,7 +96,7 @@ public class AccountRepo {
 
                         case "Driver":
                             DriverResponseDTO response = new DriverResponseDTO(
-                                    resultSet.getString("uid"),
+                                    resultSet.getInt("uid"),
                                     resultSet.getString("first_name"),
                                     resultSet.getString("last_name"),
                                     resultSet.getString("email"),
@@ -201,14 +201,14 @@ public class AccountRepo {
         }
     }
 
-    public boolean updateStatus(String id, String status) {
+    public boolean updateStatus(int id, String status) {
         String sql = "UPDATE account SET status= ?  WHERE uid = ? AND user_type = ?;";
 
         try (Connection con = DatabaseConnection.connection();
              PreparedStatement statement = con.prepareStatement(sql)) {
 
             statement.setString(1, status);
-            statement.setString(2, id);
+            statement.setInt(2, id);
             statement.setString(3, "Driver");
 
             int rowsInserted = statement.executeUpdate();
@@ -219,7 +219,7 @@ public class AccountRepo {
         }
     }
 
-    public boolean updateTierIfDifferent(String userId, int newTierId) {
+    public boolean updateTierIfDifferent(int userId, int newTierId) {
         String selectSql = "SELECT tier_id FROM account WHERE uid = ?";
         String updateSql = "UPDATE account SET tier_id = ? WHERE uid = ? AND tier_id <> ?";
 
@@ -227,7 +227,7 @@ public class AccountRepo {
              PreparedStatement selectStmt = con.prepareStatement(selectSql);
              PreparedStatement updateStmt = con.prepareStatement(updateSql)) {
 
-            selectStmt.setString(1, userId);
+            selectStmt.setInt(1, userId);
             ResultSet rs = selectStmt.executeQuery();
 
             if (rs.next()) {
@@ -238,7 +238,7 @@ public class AccountRepo {
                 }
 
                 updateStmt.setInt(1, newTierId);
-                updateStmt.setString(2, userId);
+                updateStmt.setInt(2, userId);
                 updateStmt.setInt(3, newTierId);
 
                 int rowsUpdated = updateStmt.executeUpdate();
@@ -296,16 +296,16 @@ public class AccountRepo {
         return drivers;
     }
 
-    public DriverDetailDTO getDriverById(String id) {
+    public DriverDetailDTO getDriverById(int id) {
         String sql = "SELECT * FROM account WHERE uid = ?";
         try (Connection con = DatabaseConnection.connection();
              PreparedStatement statement = con.prepareStatement(sql)) {
 
-            statement.setString(1, id);
+            statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return new DriverDetailDTO(
-                            resultSet.getString("uid"),
+                            resultSet.getInt("uid"),
                             resultSet.getString("first_name"),
                             resultSet.getString("last_name"),
                             resultSet.getString("email"),
@@ -328,7 +328,7 @@ public class AccountRepo {
         return null;
     }
 
-    public List<DriverDetailDTO> getPortionOfDriver(String limit, String offset) {
+    public List<DriverDetailDTO> getPortionOfDriver(int limit, int offset) {
         String sql = "SELECT * FROM account WHERE user_type = ? LIMIT ? OFFSET ?";
         List<DriverDetailDTO> drivers = null;
 
@@ -336,8 +336,8 @@ public class AccountRepo {
              PreparedStatement statement = con.prepareStatement(sql)) {
 
             statement.setString(1, "Driver");
-            statement.setInt(2, Integer.parseInt(limit));
-            statement.setInt(3, Integer.parseInt(offset));
+            statement.setInt(2, limit);
+            statement.setInt(3, offset);
             drivers = getDriverDetailDTOS(statement);
 
         } catch (SQLException e) {
@@ -348,7 +348,7 @@ public class AccountRepo {
         return drivers;
     }
 
-    public List<DriverDetailDTO> getPortionOfDriverWithStatus(String limit, String offset, String status) {
+    public List<DriverDetailDTO> getPortionOfDriverWithStatus(int limit, int offset, String status) {
         String sql = "SELECT * FROM account WHERE user_type = ? AND status = ? LIMIT ? OFFSET ?";
         List<DriverDetailDTO> drivers = null;
 
@@ -357,8 +357,8 @@ public class AccountRepo {
 
             statement.setString(1, "Driver");
             statement.setString(2, status);
-            statement.setInt(3, Integer.parseInt(limit));
-            statement.setInt(4, Integer.parseInt(offset));
+            statement.setInt(3, limit);
+            statement.setInt(4, offset);
             drivers = getDriverDetailDTOS(statement);
 
         } catch (SQLException e) {
@@ -375,7 +375,7 @@ public class AccountRepo {
             while (resultSet.next()) {
 
                 DriverDetailDTO detailDTO = new DriverDetailDTO(
-                        resultSet.getString("uid"),
+                        resultSet.getInt("uid"),
                         resultSet.getString("first_name"),
                         resultSet.getString("last_name"),
                         resultSet.getString("email"),

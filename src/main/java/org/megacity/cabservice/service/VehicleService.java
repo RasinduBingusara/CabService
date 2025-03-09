@@ -27,7 +27,7 @@ public class VehicleService {
         }
     }
 
-    public String getPortionOfVehicles(String limit,String offset, String status){
+    public String getPortionOfVehicles(int limit,int offset, String status){
         List<VehicleDetailsDto> vehicles = status.isEmpty()? vehicleRepo.getPortionOfVehicles(limit, offset):
                 vehicleRepo.getPortionOfVehiclesWithStatus(limit, offset,status);
         return JsonBuilder.getInstance().vehicleDetailDtoToJson(vehicles);
@@ -51,7 +51,7 @@ public class VehicleService {
         return JsonBuilder.getInstance().vehicleDetailDtoToJson(vehicles);
     }
 
-    public boolean updateStatus(String id, String status) {
+    public boolean updateStatus(int id, String status) {
         return  vehicleRepo.updateStatus(id, status);
     }
 

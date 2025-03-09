@@ -12,7 +12,7 @@ public class TierCalculator {
     BookingRepo bookingRepo = new BookingRepo();
     AccountRepo accountRepo = new AccountRepo();
 
-    public UserTier getUserTier(String customerId) {
+    public UserTier getUserTier(int customerId) {
         Tier tier = tierRepo.getTierNameByCustomerId(customerId);
         if (tier != null) {
             switch (tier.getName().toLowerCase()){
@@ -31,7 +31,7 @@ public class TierCalculator {
         return null;
     }
 
-    public boolean updateCalculatedTier(String customerId) {
+    public boolean updateCalculatedTier(int customerId) {
         int bookingCount = bookingRepo.bookingCountPerMonth(customerId);
         int tierId = 0;
         if(bookingCount < 5){

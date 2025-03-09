@@ -2,20 +2,20 @@ package org.megacity.cabservice.model;
 
 public class Vehicle {
 
-    private String id;
-    private String modelId;
+    private int id;
+    private int modelId;
     private String color;
     private String plate_no;
     private int seat_count;
     private boolean availability;
     private float price_per_km;
     private float liters_per_km;
-    private String driverId;
-    private String ownerId;
+    private int driverId;
+    private int ownerId;
     private String status;
     private String added_At;
 
-    public Vehicle(String id, String modelId, String color, String plate_no, int seat_count, boolean availability, float price_per_km, float liters_per_km, String driverId, String ownerId, String status, String added_At) {
+    public Vehicle(int id, int modelId, String color, String plate_no, int seat_count, boolean availability, float price_per_km, float liters_per_km, int driverId, int ownerId, String status, String added_At) {
         this.id = id;
         this.modelId = modelId;
         this.color = color;
@@ -30,20 +30,20 @@ public class Vehicle {
         this.added_At = added_At;
     }
 
-    public Vehicle(String id, String plate_no) {
+    public Vehicle(int id, String plate_no) {
         this.id = id;
         this.plate_no = plate_no;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public String getModelId() {
+    public int getModelId() {
         return modelId;
     }
 
-    public void setModelId(String modelId) {
+    public void setModelId(int modelId) {
         this.modelId = modelId;
     }
 
@@ -95,19 +95,19 @@ public class Vehicle {
         this.liters_per_km = liters_per_km;
     }
 
-    public String getDriverId() {
+    public int getDriverId() {
         return driverId;
     }
 
-    public void setDriverId(String driverId) {
+    public void setDriverId(int driverId) {
         this.driverId = driverId;
     }
 
-    public String getOwnerId() {
+    public int getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(String ownerId) {
+    public void setOwnerId(int ownerId) {
         this.ownerId = ownerId;
     }
 

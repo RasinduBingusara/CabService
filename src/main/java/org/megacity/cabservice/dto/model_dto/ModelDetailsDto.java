@@ -2,7 +2,7 @@ package org.megacity.cabservice.dto.model_dto;
 
 public class ModelDetailsDto {
 
-    private String modelId;
+    private int modelId;
     private String modelName;
     private String vehicleType;
     private String manufacturer;
@@ -12,7 +12,7 @@ public class ModelDetailsDto {
     private String status;
     private String addedAt;
 
-    public ModelDetailsDto(String modelId, String modelName, String vehicleType, String manufacturer, String year, String fuelType, String transmission, String status, String addedAt) {
+    public ModelDetailsDto(int modelId, String modelName, String vehicleType, String manufacturer, String year, String fuelType, String transmission, String status, String addedAt) {
         this.modelId = modelId;
         this.modelName = modelName;
         this.vehicleType = vehicleType;
@@ -24,7 +24,7 @@ public class ModelDetailsDto {
         this.addedAt = addedAt;
     }
 
-    public String getModelId() {
+    public int getModelId() {
         return modelId;
     }
 
@@ -64,7 +64,7 @@ public class ModelDetailsDto {
 
         StringBuilder json = new StringBuilder();
         json.append("{")
-                .append("\"model_id\":\"").append(escapeJson(modelId)).append("\",")
+                .append("\"model_id\":\"").append(escapeJson(String.valueOf(modelId))).append("\",")
                 .append("\"model_name\":\"").append(escapeJson(modelName)).append("\",")
                 .append("\"vehicle_type\":\"").append(escapeJson(vehicleType)).append("\",")
                 .append("\"manufacturer\":\"").append(escapeJson(manufacturer)).append("\",")

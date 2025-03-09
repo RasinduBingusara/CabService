@@ -25,7 +25,7 @@ public class DriverBookingController extends HttpServlet {
         User user = (User) session.getAttribute("user");
 
         String action = request.getParameter("action");
-        String bookingId = request.getParameter("booking_id");
+        int bookingId = Integer.parseInt(request.getParameter("booking_id"));
 
         switch (action) {
             case "accept":
@@ -62,7 +62,7 @@ public class DriverBookingController extends HttpServlet {
         User user = (User) session.getAttribute("user");
 
         String action = request.getParameter("action");
-        String id = request.getParameter("id")==null && user!=null? user.getId():request.getParameter("id");
+        int id = request.getParameter("id")==null && user!=null? user.getId(): Integer.parseInt(request.getParameter("id"));
         String json = "";
         PrintWriter out = response.getWriter();
 

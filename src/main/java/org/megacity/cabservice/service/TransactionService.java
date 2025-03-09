@@ -7,7 +7,7 @@ public class TransactionService {
 
     private TransactionRepo transactionRepo = new TransactionRepo();
 
-    public boolean updateTransaction(String transactionId) {
+    public boolean updateTransaction(int transactionId) {
         return transactionRepo.updatePaidTime(transactionId);
     }
 

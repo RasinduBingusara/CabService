@@ -2,7 +2,7 @@ package org.megacity.cabservice.model;
 
 public class Transaction {
 
-    private String id;
+    private int id;
     private double amount;
     private String paymentMethod;
     private String paidAt;
@@ -10,18 +10,18 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(String id, double amount) {
+    public Transaction(int id, double amount) {
         this.id = id;
         this.amount = amount;
     }
 
-    public Transaction(String id, double amount, String paymentMethod) {
+    public Transaction(int id, double amount, String paymentMethod) {
         this.id = id;
         this.amount = amount;
         this.paymentMethod = paymentMethod;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -37,7 +37,7 @@ public class Transaction {
         return paidAt;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

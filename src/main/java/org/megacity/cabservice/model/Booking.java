@@ -5,7 +5,7 @@ import org.megacity.cabservice.model.Users.Driver;
 
 public class Booking {
 
-    private String bookingId;
+    private int bookingId;
     private User customer;
     private User bookingUser;
     private Vehicle vehicle;
@@ -21,7 +21,7 @@ public class Booking {
     public Booking() {
     }
 
-    public Booking(String bookingId, User customer, User bookingUser, Vehicle vehicle, String pickupLocation, String destination, String pickupTime, String destinationTime, Transaction transaction, double distance, String status, String bookedAt) {
+    public Booking(int bookingId, User customer, User bookingUser, Vehicle vehicle, String pickupLocation, String destination, String pickupTime, String destinationTime, Transaction transaction, double distance, String status, String bookedAt) {
         this.bookingId = bookingId;
         this.customer = customer;
         this.bookingUser = bookingUser;
@@ -36,7 +36,7 @@ public class Booking {
         this.bookedAt = bookedAt;
     }
 
-    public String getBookingId() {
+    public int getBookingId() {
         return bookingId;
     }
 
@@ -84,7 +84,7 @@ public class Booking {
         return bookedAt;
     }
 
-    public void setBookingId(String bookingId) {
+    public void setBookingId(int bookingId) {
         this.bookingId = bookingId;
     }
 
@@ -137,20 +137,20 @@ public class Booking {
         StringBuilder json = new StringBuilder();
 
         json.append("{")
-                .append("\"booking_id\":\"").append(escapeJson(bookingId)).append("\",")
+                .append("\"booking_id\":\"").append(escapeJson(String.valueOf(bookingId))).append("\",")
                 .append("\"customer\":{")
-                .append("\"id\":\"").append(escapeJson(customer.getId())).append("\",")
+                .append("\"id\":\"").append(escapeJson(String.valueOf(customer.getId()))).append("\",")
                 .append("\"first_name\":\"").append(escapeJson(customer.getFirstName())).append("\",")
                 .append("\"last_name\":\"").append(escapeJson(customer.getLastName())).append("\"},")
                 .append("\"booking_user\":{")
-                .append("\"id\":\"").append(escapeJson(bookingUser.getId())).append("\",")
+                .append("\"id\":\"").append(escapeJson(String.valueOf(bookingUser.getId()))).append("\",")
                 .append("\"first_name\":\"").append(escapeJson(bookingUser.getFirstName())).append("\",")
                 .append("\"last_name\":\"").append(escapeJson(bookingUser.getLastName())).append("\"},")
                 .append("\"vehicle\":{")
-                .append("\"id\":\"").append(escapeJson(vehicle.getId())).append("\",")
+                .append("\"id\":\"").append(escapeJson(String.valueOf(vehicle.getId()))).append("\",")
                 .append("\"plate_no\":\"").append(escapeJson(vehicle.getPlate_no())).append("\"},") // Fixed key name
                 .append("\"transaction\":{")
-                .append("\"id\":\"").append(escapeJson(transaction.getId())).append("\",")
+                .append("\"id\":\"").append(escapeJson(String.valueOf(transaction.getId()))).append("\",")
                 .append("\"payment_method\":\"").append(escapeJson(transaction.getPaymentMethod())).append("\",")
                 .append("\"amount\":\"").append(escapeJson(String.valueOf(transaction.getAmount()))).append("\"},")
                 .append("\"location\":{")

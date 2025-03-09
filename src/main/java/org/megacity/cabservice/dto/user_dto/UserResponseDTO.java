@@ -2,7 +2,7 @@ package org.megacity.cabservice.dto.user_dto;
 
 public class UserResponseDTO {
 
-    private String id;
+    private int id;
     private String firstName;
     private String lastName;
     private String email;
@@ -10,7 +10,7 @@ public class UserResponseDTO {
     private String status;
     public static final String userTpye = "Customer";
 
-    public UserResponseDTO(String id, String firstName, String lastName, String email, String contactNumber, String status) {
+    public UserResponseDTO(int id, String firstName, String lastName, String email, String contactNumber, String status) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -19,7 +19,7 @@ public class UserResponseDTO {
         this.status = status;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 

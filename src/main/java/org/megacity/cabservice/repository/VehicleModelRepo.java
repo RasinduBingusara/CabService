@@ -58,14 +58,14 @@ public class VehicleModelRepo {
         }
         return false;
     }
-    public boolean updateStatus(String id, String status) {
+    public boolean updateStatus(int id, String status) {
         String sql = "UPDATE vehicle_model SET status = ?  WHERE model_id = ?";
 
         try (Connection con = DatabaseConnection.connection();
              PreparedStatement statement = con.prepareStatement(sql)) {
 
             statement.setString(1, status);
-            statement.setString(2, id);
+            statement.setInt(2, id);
 
             int rowsInserted = statement.executeUpdate();
 
@@ -85,7 +85,7 @@ public class VehicleModelRepo {
 
                 while (resultSet.next()) {
                     vehicleModels.add(new ModelDetailsDto(
-                            resultSet.getString("model_id"),
+                            resultSet.getInt("model_id"),
                             resultSet.getString("model_name"),
                             resultSet.getString("vehicle_type"),
                             resultSet.getString("manufacturer"),

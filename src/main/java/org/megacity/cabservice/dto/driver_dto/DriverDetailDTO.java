@@ -2,7 +2,7 @@ package org.megacity.cabservice.dto.driver_dto;
 
 public class DriverDetailDTO {
 
-    private String id;
+    private int id;
     private String firstName;
     private String lastName;
     private String email;
@@ -17,7 +17,7 @@ public class DriverDetailDTO {
     private String createdAt;
 
 
-    public DriverDetailDTO(String id, String firstName, String lastName, String email, String contactNumber, String userType, String status, String driverLicense, String nic, String address, String employmentType, String updatedAt, String createdAt) {
+    public DriverDetailDTO(int id, String firstName, String lastName, String email, String contactNumber, String userType, String status, String driverLicense, String nic, String address, String employmentType, String updatedAt, String createdAt) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -33,7 +33,7 @@ public class DriverDetailDTO {
         this.createdAt = createdAt;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -89,7 +89,7 @@ public class DriverDetailDTO {
 
         StringBuilder json = new StringBuilder();
         json.append("{")
-                .append("\"id\":\"").append(escapeJson(id)).append("\",")
+                .append("\"id\":\"").append(escapeJson(String.valueOf(id))).append("\",")
                 .append("\"first_name\":\"").append(escapeJson(firstName)).append("\",")
                 .append("\"last_name\":\"").append(escapeJson(lastName)).append("\",")
                 .append("\"email\":\"").append(escapeJson(email)).append("\",")

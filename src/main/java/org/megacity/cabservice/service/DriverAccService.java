@@ -16,7 +16,7 @@ public class DriverAccService {
     public List<DriverDetailDTO> getAllEmployeeDrivers() {
         return accountRepo.getAllDrivers();
     }
-    public List<DriverDetailDTO> getPortionOfDrivers(String limit, String offset, String status) {
+    public List<DriverDetailDTO> getPortionOfDrivers(int limit, int offset, String status) {
         return status.isEmpty()? accountRepo.getPortionOfDriver(limit, offset):
                 accountRepo.getPortionOfDriverWithStatus(limit, offset,status);
     }
@@ -24,7 +24,7 @@ public class DriverAccService {
         return status.isEmpty()? accountRepo.getDriversBySearch(keyword):
                 accountRepo.getDriversBySearchWithStatus(keyword,status);
     }
-    public String getDriverByIdInJson(String driverId) {
+    public String getDriverByIdInJson(int driverId) {
         DriverDetailDTO driver = accountRepo.getDriverById(driverId);
         return driver.toJson();
     }
@@ -64,7 +64,7 @@ public class DriverAccService {
         }
     }
 
-    public boolean updateStatus(String id, String status) {
+    public boolean updateStatus(int id, String status) {
         return accountRepo.updateStatus(id, status);
     }
 }

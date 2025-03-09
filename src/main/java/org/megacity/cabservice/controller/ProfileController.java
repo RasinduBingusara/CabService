@@ -51,7 +51,7 @@ public class ProfileController extends HttpServlet {
         User user = (User) session.getAttribute("user");
 
         String action = request.getParameter("action");
-        String id = user.getId();
+        int id = user.getId();
         String json = "";
         PrintWriter out = response.getWriter();
 

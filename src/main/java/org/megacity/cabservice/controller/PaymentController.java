@@ -17,7 +17,7 @@ public class PaymentController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String method = request.getParameter("method");
-        String transactionId = request.getParameter("transaction_id");
+        int transactionId = Integer.parseInt(request.getParameter("transaction_id"));
         double amount = Double.parseDouble(request.getParameter("amount"));
         PaymentMethod paymentMethod = new PaymentMethod() {
             @Override

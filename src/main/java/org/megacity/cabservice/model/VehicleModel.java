@@ -2,7 +2,7 @@ package org.megacity.cabservice.model;
 
 public class VehicleModel {
 
-    private String modelId;
+    private int modelId;
     private String modelName;
     private String vehicleType;
     private String manufacturer;
@@ -12,7 +12,7 @@ public class VehicleModel {
     private String status;
     private String addedAt;
 
-    public VehicleModel(String modelId, String modelName, String vehicleType, String manufacturer, String year, String fuelType, String transmission, String status, String addedAt) {
+    public VehicleModel(int modelId, String modelName, String vehicleType, String manufacturer, String year, String fuelType, String transmission, String status, String addedAt) {
         this.modelId = modelId;
         this.modelName = modelName;
         this.vehicleType = vehicleType;
@@ -24,16 +24,16 @@ public class VehicleModel {
         this.addedAt = addedAt;
     }
 
-    public VehicleModel(String modelId, String modelName) {
+    public VehicleModel(int modelId, String modelName) {
         this.modelId = modelId;
         this.modelName = modelName;
     }
 
-    public String getModelId() {
+    public int getModelId() {
         return modelId;
     }
 
-    public void setModelId(String modelId) {
+    public void setModelId(int modelId) {
         this.modelId = modelId;
     }
 

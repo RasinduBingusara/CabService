@@ -48,9 +48,10 @@ public class DriverController extends HttpServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
-        String limit = req.getParameter("limit");
-        String offset = req.getParameter("offset");
+        int limit = req.getParameter("limit")!=null? Integer.parseInt(req.getParameter("limit")):-1;
+        int offset = req.getParameter("offset")!=null? Integer.parseInt(req.getParameter("offset")):-1;
         String status = req.getParameter("status");
+        int driverId = req.getParameter("id")!=null? Integer.parseInt(req.getParameter("id")):-1;
 
 
         switch (action) {
@@ -84,7 +85,7 @@ public class DriverController extends HttpServlet {
                 out.flush();
             }
             case "single" -> {
-                String driverId = req.getParameter("id");
+
                 String driverJson = driverAccService.getDriverByIdInJson(driverId);
                 System.out.println("Single Driver: "+driverJson);
                 resp.setContentType("application/json");
@@ -95,7 +96,6 @@ public class DriverController extends HttpServlet {
                 out.flush();
             }
             case "update" -> {
-                String driverId = req.getParameter("id");
                 if(driverAccService.updateStatus(driverId, status)) {
                     req.setAttribute("message", "✅ Driver status updated Successfully");
                     req.getRequestDispatcher("drivers?action=view").forward(req, resp);

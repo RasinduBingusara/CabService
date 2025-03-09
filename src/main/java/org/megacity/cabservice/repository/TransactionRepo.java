@@ -33,13 +33,13 @@ public class TransactionRepo {
         }
     }
 
-    public boolean updatePaidTime(String id) {
+    public boolean updatePaidTime(int id) {
         String sql = "UPDATE `transaction` SET paid_at= now() WHERE id = ?";
 
         try (Connection con = DatabaseConnection.connection();
              PreparedStatement statement = con.prepareStatement(sql)) {
 
-            statement.setString(1, id);
+            statement.setInt(1, id);
 
             int rowsInserted = statement.executeUpdate();
 

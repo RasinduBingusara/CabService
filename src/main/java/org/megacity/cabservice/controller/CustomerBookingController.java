@@ -25,14 +25,15 @@ public class CustomerBookingController extends HttpServlet {
         User user = (User) session.getAttribute("user");
 
         String action = request.getParameter("action");
-        String bookingId = request.getParameter("booking_id");
+        int bookingId = Integer.parseInt(request.getParameter("booking_id"));
+        int vehicleId = Integer.parseInt(request.getParameter("vehicle"));
 
         switch (action) {
             case "add":
                 BookingInsertDto newBooking = new BookingInsertDto(
                         user.getId(),
                         user.getId(),
-                        request.getParameter("vehicle"),
+                        vehicleId,
                         request.getParameter("pickup_location"),
                         request.getParameter("destination"),
                         null,
@@ -75,7 +76,7 @@ public class CustomerBookingController extends HttpServlet {
         User user = (User) session.getAttribute("user");
 
         String action = request.getParameter("action");
-        String id = request.getParameter("id")==null && user!=null? user.getId():request.getParameter("id");
+        int id = request.getParameter("id")==null && user!=null? user.getId(): Integer.parseInt(request.getParameter("id"));
         String json = "";
         PrintWriter out = response.getWriter();
 
