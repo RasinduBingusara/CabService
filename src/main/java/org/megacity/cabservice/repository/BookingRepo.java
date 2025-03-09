@@ -67,6 +67,29 @@ public class BookingRepo {
         }
     }
 
+    public int bookingCountPerMonth(String customerId) {
+        String sql = "SELECT COUNT(id) AS booking_count " +
+                "FROM booking " +
+                "WHERE customer_id = ? GROUP BY YEAR(booked_at), MONTH(booked_at) " +
+                "ORDER BY YEAR(booked_at) DESC, MONTH(booked_at) DESC;";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, customerId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("booking_count");
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting customer by booking id: " + e.getMessage(), e);
+        }
+        return 0;
+    }
+
     public Customer getCustomerByBooking(String bookingId) {
         String sql = "SELECT a.uid, a.first_name, a.last_name, a.email, a.contact_number, a.nic, " +
                 "a.driver_license, a.address, a.user_type, a.status, a.employment_type, a.updated_at, a.created_at " +

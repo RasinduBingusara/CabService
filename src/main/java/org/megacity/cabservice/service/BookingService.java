@@ -1,18 +1,17 @@
 package org.megacity.cabservice.service;
 
 import org.megacity.cabservice.dto.booking_dto.BookingInsertDto;
-import org.megacity.cabservice.dto.vehicle_dto.VehicleDetailsDto;
 import org.megacity.cabservice.model.Booking;
 import org.megacity.cabservice.model.Notifiers.BookingNotifier;
-import org.megacity.cabservice.model.Notifiers.UserNotificationListner;
 import org.megacity.cabservice.model.Pricing.DiscountPrice;
 import org.megacity.cabservice.model.Pricing.FareCalculator;
 import org.megacity.cabservice.model.Pricing.PricingCalc;
 import org.megacity.cabservice.model.Pricing.RegularPrice;
+import org.megacity.cabservice.model.Tiers.TierCalculator;
+import org.megacity.cabservice.model.Tiers.UserTier;
 import org.megacity.cabservice.model.Transaction;
 import org.megacity.cabservice.model.Users.Customer;
 import org.megacity.cabservice.model.Users.Driver;
-import org.megacity.cabservice.model.Wrappers.BooleanWrapper;
 import org.megacity.cabservice.model.Wrappers.ResponseWrapper;
 import org.megacity.cabservice.repository.*;
 import org.megacity.cabservice.util.JsonBuilder;
@@ -57,10 +56,10 @@ public class BookingService {
         return false;
     }
 
-    public ResponseWrapper<BookingInsertDto> addNewBooking(BookingInsertDto booking, Transaction transaction){
+    public ResponseWrapper<BookingInsertDto> addNewBooking(String customerId,BookingInsertDto booking, Transaction transaction){
         if(vehicleRepo.checkVehicleAvailabilityByStatus(booking.getVehicleId(),"Active")){
 
-            transaction.setAmount(calculateFare(booking.getDistance(),booking.getVehicleId(),-1));
+            transaction.setAmount(calculateFare(customerId,booking.getDistance(),booking.getVehicleId()));
             int transactionId = transactionRepo.addTransaction(transaction);
             booking.setTransactionId(String.valueOf(transactionId));
             int bookingId = bookingRepo.addNewBooking(booking);
@@ -70,13 +69,17 @@ public class BookingService {
                 Driver driver = getDriverByBookingId(String.valueOf(bookingId));
 
                 BookingNotifier notifier = new BookingNotifier();
-                notifier.registerListener(customer);
-                notifier.setMessage("Booking successfully added");
-                notifier.removeListener(customer);
-
                 notifier.registerListener(driver);
                 notifier.setMessage("Your ride has been booked!");
+                notifier.removeAllListeners();
 
+                notifier.registerListener(customer);
+                notifier.setMessage("Booking successfully added");
+
+                boolean isTierChange = new TierCalculator().updateCalculatedTier(customerId);
+                if(isTierChange){
+                    notifier.setMessage("Your tier has been changed!");
+                }
 
                 return new ResponseWrapper<>("Booking added successfully", null);
             }
@@ -112,15 +115,17 @@ public class BookingService {
         return JsonBuilder.getInstance().bookingsToJson(bookings);
     }
 
-    public String getPriceOfBookingInJson(double distance, String vehicleId, double discount){
+    public String getPriceOfBookingInJson(String customerId,double distance, String vehicleId){
         PricingCalc pricingCalc;
         double price_per_km = vehicleRepo.getVehiclePricePerKm(vehicleId);
         double tax = taxRepo.getTaxByKeyName("Service Tax");
-        if(discount!=-1){
+
+        UserTier userTier = new TierCalculator().getUserTier(customerId);
+        if(userTier.getDiscountPercentage()!=-1){
             pricingCalc = new RegularPrice(price_per_km,tax);
         }
         else{
-            pricingCalc = new DiscountPrice(discount,price_per_km,tax);
+            pricingCalc = new DiscountPrice(userTier.getDiscountPercentage(),price_per_km,tax);
         }
 
         FareCalculator calculator = new FareCalculator(pricingCalc);
@@ -129,6 +134,8 @@ public class BookingService {
         String json = "{" +
                 "\"price_per_km\":\"" + escapeJson(String.valueOf(price_per_km)) + "\"," +
                 "\"tax\":\"" + escapeJson(String.valueOf(tax)) + "\"," +
+                "\"tier_name\":\"" + escapeJson(userTier.getTierName()) + "\"," +
+                "\"discount\":\"" + escapeJson(String.valueOf(userTier.getDiscountPercentage())) + "\"," +
                 "\"total\":\"" + escapeJson(String.valueOf(total)) + "\"" +
                 "}";
 
@@ -136,15 +143,17 @@ public class BookingService {
 
     }
 
-    private double calculateFare(double distance, String vehicleId, double discount){
+    private double calculateFare(String customerId, double distance, String vehicleId){
         PricingCalc pricingCalc;
         double price_per_km = vehicleRepo.getVehiclePricePerKm(vehicleId);
         double tax = taxRepo.getTaxByKeyName("Service Tax");
-        if(discount!=-1){
+
+        UserTier userTier = new TierCalculator().getUserTier(customerId);
+        if(userTier.getDiscountPercentage()!=-1){
             pricingCalc = new RegularPrice(price_per_km,tax);
         }
         else{
-            pricingCalc = new DiscountPrice(discount,price_per_km,tax);
+            pricingCalc = new DiscountPrice(userTier.getDiscountPercentage(), price_per_km,tax);
         }
 
         FareCalculator calculator = new FareCalculator(pricingCalc);

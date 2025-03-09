@@ -42,7 +42,7 @@ public class CustomerBookingController extends HttpServlet {
                 Transaction newTransaction = new Transaction();
                 newTransaction.setPaymentMethod(request.getParameter("payment"));
 
-                ResponseWrapper<BookingInsertDto> responseWrapper = bookingService.addNewBooking(newBooking,newTransaction);
+                ResponseWrapper<BookingInsertDto> responseWrapper = bookingService.addNewBooking(user.getId(), newBooking,newTransaction);
                 if(responseWrapper.getData() == null){
                     request.setAttribute("message", responseWrapper.getMessage());
                     request.getRequestDispatcher("customer_manage_booking.jsp").forward(request, response);

@@ -215,9 +215,42 @@ public class AccountRepo {
             return rowsInserted > 0;
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error inserting user: " + e.getMessage(), e);
+            throw new RuntimeException("Error updating status: " + e.getMessage(), e);
         }
     }
+
+    public boolean updateTierIfDifferent(String userId, int newTierId) {
+        String selectSql = "SELECT tier_id FROM account WHERE uid = ?";
+        String updateSql = "UPDATE account SET tier_id = ? WHERE uid = ? AND tier_id <> ?";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement selectStmt = con.prepareStatement(selectSql);
+             PreparedStatement updateStmt = con.prepareStatement(updateSql)) {
+
+            selectStmt.setString(1, userId);
+            ResultSet rs = selectStmt.executeQuery();
+
+            if (rs.next()) {
+                int currentTierId = rs.getInt("tier_id");
+
+                if (currentTierId == newTierId) {
+                    return true;
+                }
+
+                updateStmt.setInt(1, newTierId);
+                updateStmt.setString(2, userId);
+                updateStmt.setInt(3, newTierId);
+
+                int rowsUpdated = updateStmt.executeUpdate();
+                return rowsUpdated > 0;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating tier: " + e.getMessage(), e);
+        }
+        return false;
+    }
+
 
     public UserDetailDTO getUserDetails(String email) {
         String sql = "SELECT * FROM account WHERE email = ?";
