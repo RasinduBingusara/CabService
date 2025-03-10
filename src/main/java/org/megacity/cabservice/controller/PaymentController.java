@@ -4,6 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.megacity.cabservice.model.Bill;
 import org.megacity.cabservice.model.Payments.CardPayment;
 import org.megacity.cabservice.model.Payments.CashPayment;
 import org.megacity.cabservice.model.Payments.PaymentMethod;
@@ -55,7 +56,19 @@ public class PaymentController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        request.getRequestDispatcher("payment_gateway.jsp").forward(request, response);
+        String action = request.getParameter("action");
+        switch (action) {
+            case "gateway":
+                request.getRequestDispatcher("payment_gateway.jsp").forward(request, response);
+                break;
+            case "bill":
+                int bookingId = Integer.parseInt(request.getParameter("booking_id"));
+                Bill bill = transactionService.getBillByBookingId(bookingId);
+                request.setAttribute("bill", bill);
+                request.getRequestDispatcher("bill.jsp").forward(request, response);
+                break;
+        }
+
     }
 
 }

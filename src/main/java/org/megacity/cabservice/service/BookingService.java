@@ -2,6 +2,7 @@ package org.megacity.cabservice.service;
 
 import org.megacity.cabservice.dto.booking_dto.BookingInsertDto;
 import org.megacity.cabservice.model.Booking;
+import org.megacity.cabservice.model.Fare;
 import org.megacity.cabservice.model.Notifiers.BookingNotifier;
 import org.megacity.cabservice.model.Pricing.DiscountPrice;
 import org.megacity.cabservice.model.Pricing.FareCalculator;
@@ -56,11 +57,11 @@ public class BookingService {
         return false;
     }
 
-    public ResponseWrapper<BookingInsertDto> addNewBooking(int customerId,BookingInsertDto booking, Transaction transaction){
+    public ResponseWrapper<BookingInsertDto> addNewBooking(int customerId,BookingInsertDto booking, String paymentMethod){
         if(vehicleRepo.checkVehicleAvailabilityByStatus(booking.getVehicleId(),"Active")){
 
-            transaction.setAmount(calculateFare(customerId,booking.getDistance(),booking.getVehicleId()));
-            int transactionId = transactionRepo.addTransaction(transaction);
+            Fare calculatedFare = calculateFare(customerId,booking.getDistance(),booking.getVehicleId());
+            int transactionId = transactionRepo.addTransaction(paymentMethod,calculatedFare);
             booking.setTransactionId(transactionId);
             int bookingId = bookingRepo.addNewBooking(booking);
             if(bookingId > 0){
@@ -143,7 +144,8 @@ public class BookingService {
 
     }
 
-    private double calculateFare(int customerId, double distance, int vehicleId){
+    private Fare calculateFare(int customerId, double distance, int vehicleId){
+        Fare fare = new Fare();
         PricingCalc pricingCalc;
         double price_per_km = vehicleRepo.getVehiclePricePerKm(vehicleId);
         double tax = taxRepo.getTaxByKeyName("Service Tax");
@@ -157,7 +159,14 @@ public class BookingService {
         }
 
         FareCalculator calculator = new FareCalculator(pricingCalc);
-        return calculator.calculateFare(distance);
+        double total = calculator.calculateFare(distance);
+
+        fare.setSubTotal(price_per_km*distance);
+        fare.setTax(tax);
+        fare.setDiscount(userTier.getDiscountPercentage());
+        fare.setAfterDiscount((total*100)/(100+tax));
+        fare.setTotal(total);
+        return fare;
     }
 
     private String escapeJson(String value) {

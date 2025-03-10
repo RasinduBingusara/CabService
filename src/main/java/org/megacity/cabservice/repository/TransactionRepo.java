@@ -1,20 +1,28 @@
 package org.megacity.cabservice.repository;
 
 import org.megacity.cabservice.config.DatabaseConnection;
+import org.megacity.cabservice.dto.model_dto.ModelDetailsDto;
+import org.megacity.cabservice.model.Bill;
+import org.megacity.cabservice.model.Fare;
 import org.megacity.cabservice.model.Transaction;
 
 import java.sql.*;
 
 public class TransactionRepo {
 
-    public int addTransaction(Transaction transaction) {
-        String sql = "INSERT INTO `transaction`(amount, payment_method) VALUES (?, ?)";
+    public int addTransaction(String paymentMethod, Fare calculatedFare) {
+        String sql = "INSERT INTO transaction(amount, sub_total, discount, after_discount, tax, payment_method) " +
+                "VALUES (?,?,?,?,?,?)";
 
         try (Connection con = DatabaseConnection.connection();
              PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            statement.setDouble(1, transaction.getAmount());
-            statement.setString(2, transaction.getPaymentMethod());
+            statement.setDouble(1, calculatedFare.getTotal());
+            statement.setDouble(2, calculatedFare.getSubTotal());
+            statement.setInt(3, calculatedFare.getDiscount());
+            statement.setDouble(4, calculatedFare.getAfterDiscount());
+            statement.setDouble(5, calculatedFare.getTax());
+            statement.setString(6, paymentMethod);
 
             int rowsInserted = statement.executeUpdate();
 
@@ -48,6 +56,47 @@ public class TransactionRepo {
         } catch (SQLException e) {
             throw new RuntimeException("Error updating transaction time: " + e.getMessage(), e);
         }
+    }
+
+    public Bill getBillByBookingId(int id) {
+        String sql = "SELECT a.first_name, a.last_name, a.email, a.contact_number," +
+                "b.pickup_location, b.destination, b.distance, " +
+                "t.id AS transaction_id, t.amount, t.sub_total, t.discount, t.after_discount, t.tax " +
+                "FROM booking b JOIN account a ON b.customer_id = a.uid LEFT " +
+                "JOIN `transaction` t ON b.transaction_id = t.id " +
+                "WHERE b.id = ?";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+
+                if (resultSet.next()) {
+                    Bill bill = new Bill();
+                    Fare fare = new Fare();
+                    bill.setName(resultSet.getString("first_name") + " " + resultSet.getString("last_name"));
+                    bill.setEmail(resultSet.getString("email"));
+                    bill.setContactNumber(resultSet.getString("contact_number"));
+                    bill.setPickupLocation(resultSet.getString("pickup_location"));
+                    bill.setDropOffLocation(resultSet.getString("destination"));
+                    bill.setDistance(resultSet.getDouble("distance"));
+
+                    fare.setTotal(resultSet.getDouble("amount"));
+                    fare.setSubTotal(resultSet.getDouble("sub_total"));
+                    fare.setDiscount(resultSet.getInt("discount"));
+                    fare.setAfterDiscount(resultSet.getDouble("after_discount"));
+                    fare.setTax(resultSet.getDouble("tax"));
+
+                    bill.setFare(fare);
+                    return bill;
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting bill: " + e.getMessage(), e);
+        }
+        return null;
     }
 
 }

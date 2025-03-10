@@ -82,7 +82,7 @@
 
                     //for pay button
                     let form2 = document.createElement("form");
-                    form2.setAttribute("action","payment");
+                    form2.setAttribute("action","payment?action=gateway");
                     form2.setAttribute("method","get");
 
                     let hiddenInput2 = document.createElement("input");
@@ -97,10 +97,31 @@
                     hiddenInput23.setAttribute("type","hidden");
                     hiddenInput23.setAttribute("name","amount");
                     hiddenInput23.setAttribute("value",u.transaction.amount);
+                    let hiddenInput24 = document.createElement("input");
+                    hiddenInput24.setAttribute("type","hidden");
+                    hiddenInput24.setAttribute("name","action");
+                    hiddenInput24.setAttribute("value","gateway");
                     let button2 = document.createElement("input")
                     button2.setAttribute("type","submit");
                     button2.setAttribute("class","edit-btn");
                     button2.setAttribute("value","pay");
+
+                    let billForm = document.createElement("form");
+                    billForm.setAttribute("action","payment");
+                    billForm.setAttribute("method","get");
+
+                    let billAction = document.createElement("input");
+                    billAction.setAttribute("type","hidden");
+                    billAction.setAttribute("name","action");
+                    billAction.setAttribute("value","bill");
+                    let billInput = document.createElement("input");
+                    billInput.setAttribute("type","hidden");
+                    billInput.setAttribute("name","booking_id");
+                    billInput.setAttribute("value",u.booking_id);
+                    let billBtn = document.createElement("input")
+                    billBtn.setAttribute("type","submit");
+                    billBtn.setAttribute("class","edit-btn");
+                    billBtn.setAttribute("value","view bill");
 
 
                     switch (u.status){
@@ -119,9 +140,16 @@
                                 form2.appendChild(hiddenInput2);
                                 form2.appendChild(hiddenInput22);
                                 form2.appendChild(hiddenInput23);
+                                form2.appendChild(hiddenInput24);
                                 form2.appendChild(button2);
                                 action.appendChild(form2);
                             }
+                            break;
+                        case "Paid":
+                            billForm.appendChild(billInput);
+                            billForm.appendChild(billAction);
+                            billForm.appendChild(billBtn)
+                            action.appendChild(billForm);
                             break;
                     }
 

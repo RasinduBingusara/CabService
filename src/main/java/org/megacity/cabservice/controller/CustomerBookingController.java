@@ -40,10 +40,8 @@ public class CustomerBookingController extends HttpServlet {
                         Double.parseDouble(request.getParameter("distance")),
                         "Pending"
                 );
-                Transaction newTransaction = new Transaction();
-                newTransaction.setPaymentMethod(request.getParameter("payment"));
 
-                ResponseWrapper<BookingInsertDto> responseWrapper = bookingService.addNewBooking(user.getId(), newBooking,newTransaction);
+                ResponseWrapper<BookingInsertDto> responseWrapper = bookingService.addNewBooking(user.getId(), newBooking,request.getParameter("payment"));
                 if(responseWrapper.getData() == null){
                     request.setAttribute("message", responseWrapper.getMessage());
                     request.getRequestDispatcher("customer_manage_booking.jsp").forward(request, response);

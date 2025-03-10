@@ -1,5 +1,6 @@
 package org.megacity.cabservice.service;
 
+import org.megacity.cabservice.model.Bill;
 import org.megacity.cabservice.model.Transaction;
 import org.megacity.cabservice.repository.TransactionRepo;
 
@@ -15,5 +16,9 @@ public class TransactionService {
         System.out.println("Payment: Paid " + amount + " by " + cardHolder + " using Card: " + cardNumber + " " + expiryMonth + " " + expiryYear + " " + cvv);
         System.out.println("Payment: Paid " + amount + " using Card: " + cardNumber);
         return true;
+    }
+
+    public Bill getBillByBookingId(int bookingId) {
+        return transactionRepo.getBillByBookingId(bookingId);
     }
 }
