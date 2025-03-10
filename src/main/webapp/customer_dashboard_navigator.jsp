@@ -1,3 +1,8 @@
+<%
+  User loggedUser = (User) session.getAttribute("user");
+  if(!loggedUser.getUserType().equals("Customer"))
+    response.sendRedirect("login.jsp");
+%>
 
 <div class="sidebar">
   <div class="logo">Mega City Cab</div>

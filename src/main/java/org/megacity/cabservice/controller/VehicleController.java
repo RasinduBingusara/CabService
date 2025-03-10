@@ -21,15 +21,15 @@ public class VehicleController extends HttpServlet {
     private DriverAccService driverAccService = new DriverAccService();
 
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        String modelId = req.getParameter("vehicleModel");
+        int modelId = req.getParameter("vehicleModel")!=null? Integer.parseInt(req.getParameter("vehicleModel")):-1;
         String color = req.getParameter("color");
         String plateNo = req.getParameter("plateNumber");
-        int seatCount = Integer.parseInt(req.getParameter("seatCount"));
+        int seatCount = req.getParameter("seatCount")!=null? Integer.parseInt(req.getParameter("seatCount")):-1;
         boolean available = Objects.equals(req.getParameter("availability"), "on");
         float price_per_km = Float.parseFloat(req.getParameter("pricePerKm"));
         float liters_per_km = Float.parseFloat(req.getParameter("litersPerKm"));
-        String driverId = req.getParameter("driver");
-        String ownerId = "-1";
+        int driverId = Integer.parseInt(req.getParameter("driver"));
+        int ownerId = -1;
 
         VehicleInsertDto vehicleInsertDto = new VehicleInsertDto(
                 modelId,

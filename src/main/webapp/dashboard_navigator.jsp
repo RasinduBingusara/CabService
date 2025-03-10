@@ -1,6 +1,8 @@
 <%@ page import="org.megacity.cabservice.model.User" %>
 <%
   User loggedUser = (User) session.getAttribute("user");
+  if(!loggedUser.getUserType().equals("Admin"))
+    response.sendRedirect("login.jsp");
 %>
 
 <div class="sidebar">

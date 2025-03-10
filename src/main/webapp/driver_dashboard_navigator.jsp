@@ -1,4 +1,8 @@
-
+<%@ page import="org.megacity.cabservice.model.User" %><%
+  User user = (User) session.getAttribute("user");
+  if(!user.getUserType().equals("Driver"))
+    response.sendRedirect("login.jsp");
+%>
 <div class="sidebar">
   <div class="logo">Mega City Cab</div>
   <ul class="nav-links">
@@ -6,6 +10,11 @@
     <form action="profile" method="get">
       <input type="hidden" name="action" value="d">
       <input type="submit" value="Profile">
+    </form>
+
+    <form action="driver_vehicle" method="get">
+      <input type="hidden" name="action" value="manage">
+      <input type="submit" value="Manage Vehicle">
     </form>
 
     <form action="driver_bookings" method="get">

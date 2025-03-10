@@ -2,18 +2,18 @@ package org.megacity.cabservice.dto.vehicle_dto;
 
 public class VehicleInsertDto {
 
-    private String modelId;
+    private int modelId;
     private String color;
     private String plate_no;
     private int seat_count;
     private boolean availability;
     private float price_per_km;
     private float liters_per_km;
-    private String driverId;
-    private String ownerId;
+    private int driverId;
+    private int ownerId;
     private String status;
 
-    public VehicleInsertDto(String modelId, String color, String plate_no, int seat_count, boolean availability, float price_per_km, float liters_per_km, String driverId, String ownerId, String status) {
+    public VehicleInsertDto(int modelId, String color, String plate_no, int seat_count, boolean availability, float price_per_km, float liters_per_km, int driverId, int ownerId, String status) {
         this.modelId = modelId;
         this.color = color;
         this.plate_no = plate_no;
@@ -26,7 +26,7 @@ public class VehicleInsertDto {
         this.status = status;
     }
 
-    public String getModelId() {
+    public int getModelId() {
         return modelId;
     }
 
@@ -54,11 +54,11 @@ public class VehicleInsertDto {
         return liters_per_km;
     }
 
-    public String getDriverId() {
+    public int getDriverId() {
         return driverId;
     }
 
-    public String getOwnerId() {
+    public int getOwnerId() {
         return ownerId;
     }
 

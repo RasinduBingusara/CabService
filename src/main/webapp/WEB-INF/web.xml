@@ -94,4 +94,13 @@
         <url-pattern>/payment</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>driverVehicleController</servlet-name>
+        <servlet-class>org.megacity.cabservice.controller.DriverVehicleController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>driverVehicleController</servlet-name>
+        <url-pattern>/driver_vehicle</url-pattern>
+    </servlet-mapping>
+
 </web-app>

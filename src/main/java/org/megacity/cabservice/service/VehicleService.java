@@ -51,8 +51,22 @@ public class VehicleService {
         return JsonBuilder.getInstance().vehicleDetailDtoToJson(vehicles);
     }
 
+    public ResponseWrapper<VehicleInsertDto> updateVehicle(VehicleInsertDto vehicle, int id) {
+
+        if(vehicleRepo.updateVehicle(vehicle,id)){
+            return new ResponseWrapper<>("Vehicle renew successfully",null);
+        }
+        else{
+            return new ResponseWrapper<>("Vehicle renew failed",vehicle);
+        }
+    }
+
     public boolean updateStatus(int id, String status) {
         return  vehicleRepo.updateStatus(id, status);
+    }
+
+    public VehicleDetailsDto getVehcileByDriverId(int id) {
+        return vehicleRepo.getVehicleByDriverId(id);
     }
 
 
