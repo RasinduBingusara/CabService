@@ -40,7 +40,4 @@ public class VehicleModelService {
     public boolean updateStatus(int id, String status) {
         return vehicleModelRepo.updateStatus(id, status);
     }
-    public VehicleModel getVehicleModelById(int id) {
-        return null;
-    }
 }
