@@ -43,6 +43,7 @@ public class SignupController extends HttpServlet {
             response.sendRedirect("login.jsp");
         }
         else{
+            System.out.println("Error creating account");
             request.setAttribute("user", user);
             request.setAttribute("error", responseWrapper.getMessage());
             request.setAttribute("type", usertype);
@@ -55,11 +56,11 @@ public class SignupController extends HttpServlet {
         String type = request.getParameter("type");
         switch (type) {
             case "Driver":
-                request.setAttribute("type", "driver");
+                request.setAttribute("type", "Driver");
                 request.getRequestDispatcher("signup.jsp").forward(request,response);
                 break;
             case "Customer":
-                request.setAttribute("type", "customer");
+                request.setAttribute("type", "Customer");
                 request.getRequestDispatcher("signup.jsp").forward(request,response);
                 break;
         }

@@ -19,7 +19,7 @@
 <%@include file="Top_Navigation_Bar.jsp"%>
     <div class="signup-container">
         <%
-            if(usertype.equals("driver")){
+            if(usertype.equals("Driver")){
                 out.print("<h2>Join As a Driver</h2>");
             }
             else{
@@ -27,16 +27,16 @@
             }
         %>
         <form action="signup" method="post" class="signup-form">
-            <input type="hidden" name="usertype" value='<%= usertype%>'>
+            <input type="hidden" name="user_type" value='<%= usertype%>'>
            <div class="name-group">
                <div class="input-group">
                    <label for="firstname">First Name</label>
-                   <input type="text" id="firstname" name="firstname" placeholder="First Name..."
+                   <input type="text" id="firstname" name="first_name" placeholder="First Name..."
                           value='<%= user != null ? user.getFirstName():""%>' required>
                </div>
                <div class="input-group">
                    <label for="lastname">Last Name</label>
-                   <input type="text" id="lastname" name="lastname" placeholder="Last Name..."
+                   <input type="text" id="lastname" name="last_name" placeholder="Last Name..."
                           value='<%= user != null ? user.getLastName():""%>' required>
                </div>
            </div>
@@ -51,16 +51,16 @@
             </div>
             <div class="input-group">
                 <label for="conPassword">Confirm Password</label>
-                <input type="password" id="conPassword" name="confirmpassword" placeholder="Confirm Password..." required>
+                <input type="password" id="conPassword" name="confirm_password" placeholder="Confirm Password..." required>
             </div>
             <div class="input-group">
                 <label for="contactnumber">Contact Number</label>
                 <input type="text" pattern="\d*" inputmode="numeric" id="contactnumber"
-                       name="contactnumber" placeholder="Contact Number..."
+                       name="contact_number" placeholder="Contact Number..."
                        value='<%= user != null ? user.getContactNumber():""%>' required>
             </div>
             <%
-                if(usertype.equals("driver")){
+                if(usertype.equals("Driver")){
             %>
             <div class="input-group">
                 <label for="nic">NIC</label>
@@ -69,7 +69,7 @@
             </div>
             <div class="input-group">
                 <label for="driverlicense">Driver License</label>
-                <input type="text" id="driverlicense" name="driverlicense" placeholder="Driver License..."
+                <input type="text" id="driverlicense" name="driver_license" placeholder="Driver License..."
                        value='<%= user != null ? user.getDriverLicense():""%>' required>
             </div>
             <div class="input-group">

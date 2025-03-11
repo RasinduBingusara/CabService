@@ -51,7 +51,7 @@ public class AccountService {
             return new ResponseWrapper<>(error,null);
         }
         else if(accountRepo.isEmailExist(user.getEmail())) {
-            return new ResponseWrapper<>("User already exists",null);
+            return new ResponseWrapper<>("Email already exists",null);
         } else if (!isValidContactNumber(user.getContactNumber())) {
             return new ResponseWrapper<>("Invalid Contact Number",null);
         } else{
