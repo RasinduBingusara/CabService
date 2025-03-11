@@ -16,7 +16,11 @@ import java.util.regex.Pattern;
 
 public class AccountService {
 
-    private AccountRepo accountRepo = new AccountRepo();
+    private AccountRepo accountRepo;
+
+    public AccountService() {
+        this.accountRepo = new AccountRepo();
+    }
 
     public ResponseWrapper<User> login(UserAuthDTO userAuthDTO) {
         PasswordWrapper<User> response = accountRepo.getUserByEmail(userAuthDTO.getEmail());
@@ -31,7 +35,7 @@ public class AccountService {
         }
         else{
             System.out.println("User not found:" + userAuthDTO.getEmail());
-            return new ResponseWrapper<>("User not found",null);
+            return new ResponseWrapper<>("Invalid Username or Password",null);
         }
     }
 
