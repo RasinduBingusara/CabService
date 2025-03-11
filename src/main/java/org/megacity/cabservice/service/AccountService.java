@@ -12,6 +12,8 @@ import org.megacity.cabservice.model.User;
 import org.megacity.cabservice.repository.AccountRepo;
 import org.megacity.cabservice.util.PasswordUtill;
 
+import java.util.regex.Pattern;
+
 public class AccountService {
 
     private AccountRepo accountRepo = new AccountRepo();
@@ -50,8 +52,9 @@ public class AccountService {
         }
         else if(accountRepo.isEmailExist(user.getEmail())) {
             return new ResponseWrapper<>("User already exists",null);
-        }
-        else{
+        } else if (!isValidContactNumber(user.getContactNumber())) {
+            return new ResponseWrapper<>("Invalid Contact Number",null);
+        } else{
             String hashedPassword = PasswordUtill.getInstance().hashPassword(user.getPassword());
             user.setPassword(hashedPassword);
 
@@ -118,4 +121,11 @@ public class AccountService {
         }
         return "{}";
     }
+
+
+    public static boolean isValidContactNumber(String mobileNumber) {
+        String mobileRegex = "^07[1-9]\\d{7}$";
+        return Pattern.matches(mobileRegex, mobileNumber);
+    }
+
 }
