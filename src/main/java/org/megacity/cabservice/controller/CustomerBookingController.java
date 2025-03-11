@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.megacity.cabservice.dto.booking_dto.BookingInsertDto;
 import org.megacity.cabservice.model.Notifiers.BookingNotifier;
-import org.megacity.cabservice.model.Transaction;
 import org.megacity.cabservice.model.User;
 import org.megacity.cabservice.model.Wrappers.ResponseWrapper;
 import org.megacity.cabservice.service.BookingService;
@@ -36,7 +35,6 @@ public class CustomerBookingController extends HttpServlet {
                         vehicleId,
                         request.getParameter("pickup_location"),
                         request.getParameter("destination"),
-                        null,
                         Double.parseDouble(request.getParameter("distance")),
                         "Pending"
                 );
@@ -85,7 +83,7 @@ public class CustomerBookingController extends HttpServlet {
             case "add":
                 request.getRequestDispatcher("customer_add_booking.jsp").forward(request, response);
             case "history":
-                json = bookingService.getBookingsByCustomerId(id);
+                json = bookingService.getBookingsByCustomerIdInJson(id);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
 

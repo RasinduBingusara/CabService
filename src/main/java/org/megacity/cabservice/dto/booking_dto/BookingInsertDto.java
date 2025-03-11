@@ -27,6 +27,16 @@ public class BookingInsertDto {
         this.status = status;
     }
 
+    public BookingInsertDto(int customerId, int userId, int vehicleId, String pickupLocation, String destination, double distance, String status) {
+        this.customerId = customerId;
+        this.userId = userId;
+        this.vehicleId = vehicleId;
+        this.pickupLocation = pickupLocation;
+        this.destination = destination;
+        this.distance = distance;
+        this.status = status;
+    }
+
     public int getCustomerId() {
         return customerId;
     }

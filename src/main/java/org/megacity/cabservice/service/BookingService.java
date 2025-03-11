@@ -10,7 +10,6 @@ import org.megacity.cabservice.model.Pricing.PricingCalc;
 import org.megacity.cabservice.model.Pricing.RegularPrice;
 import org.megacity.cabservice.model.Tiers.TierCalculator;
 import org.megacity.cabservice.model.Tiers.UserTier;
-import org.megacity.cabservice.model.Transaction;
 import org.megacity.cabservice.model.Users.Customer;
 import org.megacity.cabservice.model.Users.Driver;
 import org.megacity.cabservice.model.Wrappers.ResponseWrapper;
@@ -100,7 +99,7 @@ public class BookingService {
         return bookingRepo.getDriverByBooking(bookingId);
     }
 
-    public String getBookingsByCustomerId(int customerId){
+    public String getBookingsByCustomerIdInJson(int customerId){
         List<Booking> bookings = bookingRepo.getBookingsByCustomerId(customerId);
         return JsonBuilder.getInstance().bookingsToJson(bookings);
 
