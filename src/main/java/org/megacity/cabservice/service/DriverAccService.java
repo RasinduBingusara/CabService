@@ -26,7 +26,10 @@ public class DriverAccService {
     }
     public String getDriverByIdInJson(int driverId) {
         DriverDetailDTO driver = accountRepo.getDriverById(driverId);
-        return driver.toJson();
+        if(driver != null) {
+            return driver.toString();
+        }
+        return null;
     }
 
     public ResponseWrapper<User> addEmployeeDriverAcc(DriverInsertDTO user, String confirmPassword) {
