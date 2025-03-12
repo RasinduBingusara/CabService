@@ -70,4 +70,8 @@ public class DriverAccService {
     public boolean updateStatus(int id, String status) {
         return accountRepo.updateStatus(id, status);
     }
+
+    public int getTotalActiveDriversCount() {
+        return accountRepo.getTotalActiveDriversCount();
+    }
 }

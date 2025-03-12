@@ -9,6 +9,10 @@
   <div class="logo">Mega City Cab</div>
   <ul class="nav-links">
 
+    <form action="admin_dashboard" method="get">
+      <input type="submit" value="Report">
+    </form>
+
     <form action="bookings" method="get">
       <input type="hidden" name="action" value="view">
       <input type="submit" value="Manage Bookings">
@@ -29,8 +33,9 @@
       <input type="submit" value="Manage Vehicle Model">
     </form>
 
-    <form action="login" method="get">
-      <input type="submit" value="Logout">
+    <form action="profile" method="post">
+      <input type="hidden" name="action" value="logout">
+      <input type="submit" value="logout">
     </form>
   </ul>
 </div>

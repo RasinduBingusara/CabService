@@ -7,6 +7,8 @@ import org.megacity.cabservice.model.Fare;
 import org.megacity.cabservice.model.Transaction;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransactionRepo {
 
@@ -99,4 +101,43 @@ public class TransactionRepo {
         return null;
     }
 
+    public List<Double> getMonthlyRevenues(){
+        String sql = "SELECT MONTH(paid_at) AS month, SUM(amount) AS total_amount FROM `transaction` " +
+                "WHERE YEAR(paid_at) = YEAR(CURDATE()) GROUP BY MONTH(paid_at) ORDER BY MONTH(paid_at);";
+
+        List<Double> monthlyRevenues = new ArrayList<>();
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+
+                if (resultSet.next()) {
+                    monthlyRevenues.add(resultSet.getDouble("total_amount"));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting monthly revenues: " + e.getMessage(), e);
+        }
+        return monthlyRevenues;
+    }
+
+    public double getMonthlyRevenue() {
+        String sql = "SELECT SUM(t.amount) AS total_revenue FROM `transaction` t JOIN `booking` b ON t.id = b.transaction_id WHERE MONTH(b.booked_at) = MONTH(CURDATE()) AND YEAR(b.booked_at) = YEAR(CURDATE());\n";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+
+                if (resultSet.next()) {
+                    return resultSet.getDouble("total_revenue");
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting monthly revenue: " + e.getMessage(), e);
+        }
+        return 0;
+    }
 }

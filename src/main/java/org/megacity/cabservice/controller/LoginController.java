@@ -39,7 +39,7 @@ public class LoginController extends HttpServlet {
                     break;
                 case "Admin":
                     request.setAttribute("message", authResponse.getMessage());
-                    request.getRequestDispatcher("admin_dashboard.jsp").forward(request, response);
+                    response.sendRedirect("admin_dashboard");
                     break;
             }
         }

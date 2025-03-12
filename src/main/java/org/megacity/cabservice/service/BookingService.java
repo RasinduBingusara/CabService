@@ -178,4 +178,12 @@ public class BookingService {
                 .replace("\r", "\\r")    // Escape carriage returns
                 .replace("\t", "\\t");   // Escape tabs
     }
+
+    public int getTotalBookingsInMonth(){
+        return bookingRepo.getMonthlyBookingCount();
+    }
+
+    public List<Booking> getRecentBookings(int count){
+        return bookingRepo.getLatestBookings(count);
+    }
 }

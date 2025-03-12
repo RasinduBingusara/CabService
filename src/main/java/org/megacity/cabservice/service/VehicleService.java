@@ -69,5 +69,8 @@ public class VehicleService {
         return vehicleRepo.getVehicleByDriverId(id);
     }
 
+    public int getTotalActiveVehicleCount() {
+        return vehicleRepo.getTotalActiveVehicleCount();
+    }
 
 }

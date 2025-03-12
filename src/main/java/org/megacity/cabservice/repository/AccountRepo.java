@@ -437,4 +437,22 @@ public class AccountRepo {
 
         return drivers;
     }
+
+    public int getTotalActiveDriversCount() {
+        String sql = "SELECT COUNT(*) AS active_drivers FROM `account` WHERE user_type = 'driver' AND status = 'active';";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("active_drivers");
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting total driver Count: " + e.getMessage(), e);
+        }
+        return 0;
+    }
 }

@@ -143,6 +143,24 @@ public class VehicleRepo {
         return -1;
     }
 
+    public int getTotalActiveVehicleCount() {
+        String sql = "SELECT COUNT(*) AS active_vehicles FROM `vehicle` WHERE status = 'Active';";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("active_vehicles");
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error active vehicle count: " + e.getMessage(), e);
+        }
+        return 0;
+    }
+
     public VehicleDetailsDto getVehicleByDriverId(int driverId) {
         String sql = "SELECT v.id, v.model AS model_id, vm.model_name, v.color, v.plate_no, v.seat_count, " +
                 "v.availability, v.price_per_km, v.liter_per_km, v.driver_id, d.first_name AS driver_first_name, " +

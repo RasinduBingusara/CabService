@@ -103,4 +103,13 @@
         <url-pattern>/driver_vehicle</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>adminDashboard</servlet-name>
+        <servlet-class>org.megacity.cabservice.controller.AdminDashboardController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>adminDashboard</servlet-name>
+        <url-pattern>/admin_dashboard</url-pattern>
+    </servlet-mapping>
+
 </web-app>

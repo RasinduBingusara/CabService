@@ -89,6 +89,49 @@ public class BookingRepo {
         }
         return 0;
     }
+    public int getMonthlyBookingCount(){
+        String sql = "SELECT COUNT(*) AS booking_count FROM `booking` " +
+                "WHERE MONTH(booked_at) = MONTH(CURDATE()) AND YEAR(booked_at) = YEAR(CURDATE());";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("booking_count");
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting customer by booking id: " + e.getMessage(), e);
+        }
+        return 0;
+    }
+
+    public List<Booking> getLatestBookings(int count){
+        String sql = "SELECT b.id AS booking_id, c.uid AS customer_id, c.first_name AS customer_first_name, " +
+                "c.last_name AS customer_last_name, u.uid AS user_id, u.first_name AS user_first_name, " +
+                "u.last_name AS user_last_name, v.id AS vehicle_id, v.plate_no, t.id AS transaction_id, " +
+                "t.amount, t.payment_method, b.pickup_location, b.destination, b.distance,b.pickup_time,b.destination_time,b.status, b.booked_at FROM booking b " +
+                "JOIN account c ON b.customer_id = c.uid JOIN account u ON b.user_id = u.uid JOIN vehicle v " +
+                "ON b.car_id = v.id LEFT JOIN `transaction` t ON b.transaction_id = t.id " +
+                "ORDER BY booked_at DESC LIMIT ?";
+        List<Booking> bookings = null;
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setInt(1, count);
+
+            bookings = getBookingsFromStatement(statement);
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting latest bookings: " + e.getMessage(), e);
+        }
+
+        return bookings;
+    }
+
 
     public Customer getCustomerByBooking(int bookingId) {
         String sql = "SELECT a.uid, a.first_name, a.last_name, a.email, a.contact_number, a.nic, " +
@@ -412,4 +455,6 @@ public class BookingRepo {
         }
         return bookings;
     }
+
+
 }
