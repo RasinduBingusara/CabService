@@ -39,7 +39,7 @@ public class ProfileController extends HttpServlet {
         }
         else if(action.equals("logout")){
             System.out.println("Logged out");
-            session.removeAttribute("user");
+            session.invalidate();
             resp.sendRedirect("/");
         }
     }
