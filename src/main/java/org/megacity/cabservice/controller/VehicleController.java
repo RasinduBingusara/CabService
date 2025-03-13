@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.megacity.cabservice.dto.vehicle_dto.VehicleInsertDto;
+import org.megacity.cabservice.model.User;
 import org.megacity.cabservice.model.Wrappers.ResponseWrapper;
 import org.megacity.cabservice.service.DriverAccService;
 import org.megacity.cabservice.service.VehicleModelService;
@@ -21,6 +22,7 @@ public class VehicleController extends HttpServlet {
     private DriverAccService driverAccService = new DriverAccService();
 
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        User user = (User) req.getSession().getAttribute("user");
         int modelId = req.getParameter("vehicleModel")!=null? Integer.parseInt(req.getParameter("vehicleModel")):-1;
         String color = req.getParameter("color");
         String plateNo = req.getParameter("plateNumber");
@@ -29,7 +31,7 @@ public class VehicleController extends HttpServlet {
         float price_per_km = Float.parseFloat(req.getParameter("pricePerKm"));
         float liters_per_km = Float.parseFloat(req.getParameter("litersPerKm"));
         int driverId = Integer.parseInt(req.getParameter("driver"));
-        int ownerId = -1;
+        int ownerId = 1;
 
         VehicleInsertDto vehicleInsertDto = new VehicleInsertDto(
                 modelId,

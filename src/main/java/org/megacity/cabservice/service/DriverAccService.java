@@ -14,7 +14,7 @@ public class DriverAccService {
 
     private AccountRepo accountRepo = new AccountRepo();
     public List<DriverDetailDTO> getAllEmployeeDrivers() {
-        return accountRepo.getAllDrivers();
+        return accountRepo.getAllEmployeeDrivers();
     }
     public List<DriverDetailDTO> getPortionOfDrivers(int limit, int offset, String status) {
         return status.isEmpty()? accountRepo.getPortionOfDriver(limit, offset):

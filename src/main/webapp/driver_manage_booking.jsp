@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="CSS/manage_booking.css">
 </head>
 <body>
-<%@include file="Top_Navigation_Bar.jsp"%>
+
 <%@include file="driver_dashboard_navigator.jsp"%>
 
 <div class="content">

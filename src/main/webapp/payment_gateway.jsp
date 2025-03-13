@@ -19,6 +19,7 @@
         <input type="hidden" name="transaction_id" value='<%= request.getParameter("transaction_id")%>'>
         <input type="hidden" name="amount" value='<%= request.getParameter("amount")%>'>
         <input type="hidden" name="method" value="Card">
+        <input type="hidden" name="type" value="customer">
         <div class="form-group">
             <label for="cardholder">Cardholder Name:</label>
             <input type="text" id="cardholder" name="card_holder" placeholder="John Doe" required>

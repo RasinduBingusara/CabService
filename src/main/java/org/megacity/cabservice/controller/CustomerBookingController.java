@@ -24,8 +24,8 @@ public class CustomerBookingController extends HttpServlet {
         User user = (User) session.getAttribute("user");
 
         String action = request.getParameter("action");
-        int bookingId = Integer.parseInt(request.getParameter("booking_id"));
-        int vehicleId = Integer.parseInt(request.getParameter("vehicle"));
+        int bookingId = request.getParameter("booking_id")!=null ? Integer.parseInt(request.getParameter("booking_id")) : -1;
+        int vehicleId = request.getParameter("vehicle")!=null? Integer.parseInt(request.getParameter("vehicle")): -1;
 
         switch (action) {
             case "add":

@@ -33,7 +33,7 @@ public class ProfileController extends HttpServlet {
                 req.getRequestDispatcher("customer_profile.jsp").forward(req, resp);
             }
             else{
-                req.setAttribute("error",booleanWrapper.getMessage());
+                req.setAttribute("message",booleanWrapper.getMessage());
                 req.getRequestDispatcher("customer_profile.jsp").forward(req, resp);
             }
         }

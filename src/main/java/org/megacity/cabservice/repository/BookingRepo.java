@@ -239,7 +239,7 @@ public class BookingRepo {
                 "t.amount, t.payment_method, b.pickup_location, b.destination, b.distance,b.pickup_time,b.destination_time,b.status, b.booked_at FROM booking b " +
                 "JOIN account c ON b.customer_id = c.uid JOIN account u ON b.user_id = u.uid JOIN vehicle v " +
                 "ON b.car_id = v.id LEFT JOIN `transaction` t ON b.transaction_id = t.id " +
-                "WHERE c.uid = ?";
+                "WHERE c.uid = ? ORDER BY b.booked_at DESC";
         List<Booking> bookings = null;
 
         try (Connection con = DatabaseConnection.connection();

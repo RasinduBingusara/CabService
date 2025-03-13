@@ -39,7 +39,6 @@
 
             <div class="selection-container">
                 <h3>Select Vehicle</h3>
-                <input type="text" id="searchVehicle" placeholder="Search vehicle..." onkeyup="filterTable('vehicleTable', 'searchVehicle')">
 
                 <div>
                     <table id="vehicleTable">

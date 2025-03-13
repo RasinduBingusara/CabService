@@ -26,16 +26,19 @@ public class AccountService {
         PasswordWrapper<User> response = accountRepo.getUserByEmail(userAuthDTO.getEmail());
         if(response.getData() != null) {
 
-            if(PasswordUtill.getInstance().checkPassword(userAuthDTO.getPassword(), response.getPassword())) {
+            if(response.getData().getStatus()!= null && response.getData().getStatus().equals("Banned")){
+                return new ResponseWrapper<>("🔴 Your Account has been Banned!",null);
+            }
+            else if(PasswordUtill.getInstance().checkPassword(userAuthDTO.getPassword(), response.getPassword())) {
                 return new ResponseWrapper<>("User logged in successfully",response.getData());
             }
             else{
-                return new ResponseWrapper<>("Invalid Username or Password",null);
+                return new ResponseWrapper<>("🔴 Invalid Username or Password",null);
             }
         }
         else{
             System.out.println("User not found:" + userAuthDTO.getEmail());
-            return new ResponseWrapper<>("Invalid Username or Password",null);
+            return new ResponseWrapper<>("🔴 Invalid Username or Password",null);
         }
     }
 

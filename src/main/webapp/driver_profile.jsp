@@ -6,6 +6,16 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String message = (String) request.getAttribute("message");
+    if (message != null) {
+%>
+<script>
+    alert("<%= message.replace("\"", "\\\"").replace("'", "\\'") %>");
+</script>
+<%
+    }
+%>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,7 +24,6 @@
     <link rel="stylesheet" href="CSS/profile.css">
 </head>
 <body>
-<%@include file="Top_Navigation_Bar.jsp"%>
 <%@include file="driver_dashboard_navigator.jsp"%>
 
 <div class="content" style="margin-top: 80px">

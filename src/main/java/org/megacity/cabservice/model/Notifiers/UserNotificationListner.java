@@ -4,3 +4,4 @@ public interface UserNotificationListner {
 
     void update(String message);
 }
+

@@ -150,7 +150,7 @@ public class BookingService {
         double tax = taxRepo.getTaxByKeyName("Service Tax");
 
         UserTier userTier = new TierCalculator().getUserTier(customerId);
-        if(userTier.getDiscountPercentage()!=-1){
+        if(userTier.getDiscountPercentage()!=0){
             pricingCalc = new RegularPrice(price_per_km,tax);
         }
         else{

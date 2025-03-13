@@ -296,6 +296,27 @@ public class AccountRepo {
         return drivers;
     }
 
+    public List<DriverDetailDTO> getAllEmployeeDrivers() {
+        String sql = "SELECT a.* " +
+                "FROM `account` a LEFT JOIN `vehicle` v ON a.uid = v.driver_id " +
+                "WHERE a.user_type = ? AND a.employment_type = ? AND v.driver_id IS NULL;";
+        List<DriverDetailDTO> drivers = null;
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, "Driver");
+            statement.setString(2, "Employee");
+            drivers = getDriverDetailDTOS(statement);
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error getting all employee drivers: " + e.getMessage(), e);
+        }
+
+
+        return drivers;
+    }
+
     public DriverDetailDTO getDriverById(int id) {
         String sql = "SELECT * FROM account WHERE uid = ?";
         try (Connection con = DatabaseConnection.connection();

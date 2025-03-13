@@ -1,6 +1,15 @@
 <%@ page import="org.megacity.cabservice.model.User" %>
 <%
-  User loggedUser = (User) session.getAttribute("user");
+  User navigatorUser = (User) session.getAttribute("user");
+  System.out.println("Loaded");
+  if(navigatorUser != null && navigatorUser.getUserType()!=null){
+    if(navigatorUser.getUserType().equals("Admin")){
+      response.sendRedirect("admin_dashboard");
+    } else if (navigatorUser.getUserType().equals("Driver")) {
+      System.out.println("Driver");
+      request.getRequestDispatcher("driver_manage_booking.jsp").forward(request, response);
+    }
+  }
 %>
 
 <header>
@@ -16,7 +25,7 @@
       <li><a href="signup?type=Driver">Join as a Driver</a></li>
 
       <%
-        if(loggedUser == null){
+        if(navigatorUser == null){
       %>
       <li><a href="login.jsp">Sign In</a></li>
       <li><a href="signup?type=Customer">Sign Up</a></li>
@@ -24,7 +33,7 @@
       } else {
       %>
       <li class="profile-menu">
-        <a href="#"> <%= loggedUser.getFirstName() %></a>
+        <a href="#"> <%= navigatorUser.getFirstName() %></a>
         <ul class="profile-dropdown">
           <li><a href="profile?action=c">Profile</a></li>
           <form action="profile" method="post">
