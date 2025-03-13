@@ -20,6 +20,7 @@
       <li><a href="home.jsp">Home</a></li>
       <li><a href="service.jsp">Services</a></li>
       <li><a href="about-us.jsp">About Us</a></li>
+      <li><a href="user_guide.jsp">Guide</a></li>
       <li><a href="customer_add_booking.jsp">Book Now</a></li>
       <li><a href="signup?type=Driver">Join as a Driver</a></li>
 
@@ -109,7 +110,6 @@
     color: #ffcc00;
   }
 
-  /* Profile Dropdown */
   .profile-menu {
     position: relative;
   }
@@ -168,7 +168,6 @@
     color: #333;
   }
 
-  /* Logout Button */
   .profile-dropdown form {
     margin: 0;
     padding: 0;
@@ -190,7 +189,6 @@
     color: #333;
   }
 
-  /* Responsive */
   @media (max-width: 768px) {
     nav {
       flex-direction: column;
@@ -231,4 +229,3 @@
   }
 </style>
 
-</style>
