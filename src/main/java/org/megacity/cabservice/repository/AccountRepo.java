@@ -278,6 +278,35 @@ public class AccountRepo {
 
     }
 
+    public DriverDetailDTO getDriverDetails(String email) {
+        String sql = "SELECT * FROM account WHERE email = ?";
+
+        try (Connection con = DatabaseConnection.connection();
+             PreparedStatement statement = con.prepareStatement(sql)) {
+
+            statement.setString(1, email);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+
+                    return new DriverDetailDTO(
+                            resultSet.getString("first_name"),
+                            resultSet.getString("last_name"),
+                            resultSet.getString("email"),
+                            resultSet.getString("contact_number"),
+                            resultSet.getString("driver_license"),
+                            resultSet.getString("nic"),
+                            resultSet.getString("address")
+                    );
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking email existence: " + e.getMessage(), e);
+        }
+        return null;
+
+    }
+
     public List<DriverDetailDTO> getAllDrivers() {
         String sql = "SELECT * FROM account WHERE user_type = ?";
         List<DriverDetailDTO> drivers = null;

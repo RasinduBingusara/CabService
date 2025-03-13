@@ -33,6 +33,16 @@ public class DriverDetailDTO {
         this.createdAt = createdAt;
     }
 
+    public DriverDetailDTO(String firstName, String lastName, String email, String contactNumber, String driverLicense, String nic, String address) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.contactNumber = contactNumber;
+        this.driverLicense = driverLicense;
+        this.nic = nic;
+        this.address = address;
+    }
+
     public int getId() {
         return id;
     }

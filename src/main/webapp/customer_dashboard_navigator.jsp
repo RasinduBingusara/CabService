@@ -1,6 +1,6 @@
 <%
   User loggedUser = (User) session.getAttribute("user");
-  if(!loggedUser.getUserType().equals("Customer"))
+  if(loggedUser==null || !loggedUser.getUserType().equals("Customer"))
     response.sendRedirect("login.jsp");
 %>
 

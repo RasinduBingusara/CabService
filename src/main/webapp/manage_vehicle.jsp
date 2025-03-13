@@ -18,7 +18,7 @@
 %>
 <html>
 <head>
-    <title>Title</title>
+    <title>Manage Vehicle</title>
     <link rel="stylesheet" href="CSS/manage_dashboard.css">
 </head>
 <body>

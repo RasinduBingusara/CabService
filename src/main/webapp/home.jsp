@@ -18,7 +18,7 @@
     <div class="hero-content">
         <h1>Reliable and Affordable Cab Services</h1>
         <p>Book your ride with Mega City Cab and travel with comfort and safety.</p>
-        <a href="#book" class="btn">Book a Ride</a>
+        <a href="customer_add_booking.jsp" class="btn">Book a Ride</a>
     </div>
 </section>
 

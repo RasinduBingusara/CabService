@@ -24,17 +24,17 @@ public class ProfileController extends HttpServlet {
 
 
         if(action.equals("update")){
-            String newPassword = req.getParameter("newpassword");
-            String confirmPassword = req.getParameter("confirmpassword");
+            String newPassword = req.getParameter("new_password");
+            String confirmPassword = req.getParameter("confirm_password");
 
             BooleanWrapper booleanWrapper = accountService.updateAccountPassword(loggedUser.getEmail(), newPassword, confirmPassword);
-            if(booleanWrapper.isValue()){
+            if(loggedUser.getUserType().equals("Customer")){
                 req.setAttribute("message",booleanWrapper.getMessage());
                 req.getRequestDispatcher("customer_profile.jsp").forward(req, resp);
             }
-            else{
+            else if(loggedUser.getUserType().equals("Driver")){
                 req.setAttribute("message",booleanWrapper.getMessage());
-                req.getRequestDispatcher("customer_profile.jsp").forward(req, resp);
+                req.getRequestDispatcher("driver_profile.jsp").forward(req, resp);
             }
         }
         else if(action.equals("logout")){
@@ -64,7 +64,7 @@ public class ProfileController extends HttpServlet {
                     request.getRequestDispatcher("driver_profile.jsp").forward(request, response);
                     break;
                 case "history":
-                    json = accountService.getProfileInfoInJson(user.getEmail());
+                    json = accountService.getProfileInfoInJson(user.getEmail(),user.getUserType());
                     System.out.println(json);
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");

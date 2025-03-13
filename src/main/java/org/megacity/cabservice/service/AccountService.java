@@ -1,5 +1,6 @@
 package org.megacity.cabservice.service;
 
+import org.megacity.cabservice.dto.driver_dto.DriverDetailDTO;
 import org.megacity.cabservice.dto.driver_dto.DriverInsertDTO;
 import org.megacity.cabservice.dto.user_dto.UserAuthDTO;
 import org.megacity.cabservice.dto.user_dto.UserDetailDTO;
@@ -96,14 +97,14 @@ public class AccountService {
     public BooleanWrapper updateAccountPassword(String email, String newPassword, String confirmPassword) {
 
         if(!accountRepo.isEmailExist(email)) {
-            return new BooleanWrapper("Email not exists",false);
+            return new BooleanWrapper("🔴 Email not exists",false);
         }
         else if(!newPassword.equals(confirmPassword)) {
-            return new BooleanWrapper("Password and Confirm Password must be same",false);
+            return new BooleanWrapper("🔴 Password and Confirm Password must be same",false);
         }
         else if (!PasswordUtill.getInstance().isValidPassword(newPassword)) {
             System.out.println("new password: " + newPassword);
-            String error = "At least one uppercase letter (A-Z) </br>" +
+            String error = "🔴 At least one uppercase letter (A-Z) </br>" +
                     "At least one lowercase letter (a-z) </br>" +
                     "At least one digit (0-9) </br>" +
                     "At least one special character </br>" +
@@ -114,11 +115,11 @@ public class AccountService {
             PasswordWrapper<User> response = accountRepo.getUserByEmail(email);
             if(response.getData() != null) {
                 String hashedPassword = PasswordUtill.getInstance().hashPassword(newPassword);
-                return accountRepo.updatePassword(response.getData().getEmail(),hashedPassword)? new BooleanWrapper("Password updated successfully",true)
-                        : new BooleanWrapper("Password update failed",false);
+                return accountRepo.updatePassword(response.getData().getEmail(),hashedPassword)? new BooleanWrapper("✅ Password updated successfully",true)
+                        : new BooleanWrapper("🔴 Password update failed",false);
             }
         }
-        return new BooleanWrapper("Password update failed",false);
+        return new BooleanWrapper("🔴 Password update failed",false);
     }
 
     public String getProfileInfoInJson(String email) {
@@ -126,6 +127,24 @@ public class AccountService {
         if(userDetailDTO != null) {
             return userDetailDTO.toJson();
         }
+        return "{}";
+    }
+
+    public String getProfileInfoInJson(String email,String userType) {
+
+        if(userType.equals("Driver")) {
+            DriverDetailDTO driverDetailDTO = accountRepo.getDriverDetails(email);
+            if(driverDetailDTO != null) {
+                return driverDetailDTO.toJson();
+            }
+        }
+        else if(userType.equals("Customer")) {
+            UserDetailDTO userDetailDTO = accountRepo.getUserDetails(email);
+            if(userDetailDTO != null) {
+                return userDetailDTO.toJson();
+            }
+        }
+
         return "{}";
     }
 
